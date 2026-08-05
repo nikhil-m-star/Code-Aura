@@ -57,7 +57,7 @@ body {
   background-color: #181818;
 }
 
-/* Smooth Right-to-Left Marquee Animation */
+/* Smooth & Calm Right-to-Left Marquee Animation */
 @keyframes marquee {
   0% {
     transform: translateX(0%);
@@ -70,13 +70,14 @@ body {
 .animate-marquee {
   display: flex;
   width: max-content;
-  animation: marquee 14s linear infinite;
+  animation: marquee 35s linear infinite;
+  will-change: transform;
 }
 
 /* Fade Edges Mask */
 .mask-fade-edges {
-  mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
 }
 
 /* Custom Minimal Scrollbar */
