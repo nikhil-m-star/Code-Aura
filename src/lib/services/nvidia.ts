@@ -9,6 +9,15 @@ export interface AISummary {
   keyVibe: string
   observations: string[]
   roastOrPraise: string
+  devNemesis: string
+  recommendedStack: string
+  radarStats: {
+    velocity: number
+    clarity: number
+    algorithms: number
+    stamina: number
+    impact: number
+  }
 }
 
 export async function generateAISummary(
@@ -19,46 +28,50 @@ export async function generateAISummary(
 
   if (apiKey) {
     try {
-      const prompt = `You are a hilarious, witty, and deeply observant senior tech lead analyzing a developer's GitHub and LeetCode profile. Generate a fun, witty AI developer aura analysis based on these real stats:
+      const prompt = `You are a hilarious, observant senior tech lead doing a deep analysis of a developer. Produce a witty, highly specific developer aura analysis using these real stats:
 
 GitHub Stats:
 - Username: ${github.username}
-- Top Language: ${github.topLanguage}
-- All Languages: ${github.languages.map((l) => `${l.name} (${l.percentage}%)`).join(', ')}
-- Public Repos: ${github.publicRepos}
-- Total Stars: ${github.totalStars}
-- Total Forks: ${github.totalForks}
-- Followers: ${github.followers}
-- Night Owl Activity Ratio: ${github.nightOwlScore}% late-night commits
+- Top Language: ${github.topLanguage} (${github.languages.map((l) => `${l.name}: ${l.percentage}%`).join(', ')})
+- Public Repos: ${github.publicRepos} | Total Stars: ${github.totalStars} | Total Forks: ${github.totalForks} | Followers: ${github.followers}
+- Primary Work Window: ${github.timeSlot} (Night-owl ratio: ${github.nightOwlScore}%)
+- Activity: ${github.recentCommitCount} recent commits, ${github.pullRequestCount} PRs, ${github.issueCount} issue events
+- Code Complexity Rating: ${github.codeComplexityScore}/99
 - Top Repos: ${github.topRepos.map((r) => `${r.name} (${r.stars}★)`).join(', ')}
 
 LeetCode Stats: ${
         leetcode
           ? `
-- Solved: ${leetcode.totalSolved} total (${leetcode.easySolved} Easy, ${leetcode.mediumSolved} Medium, ${leetcode.hardSolved} Hard)
-- Acceptance Rate: ${leetcode.acceptanceRate}%
-- Top Solved Languages: ${leetcode.topLanguages.join(', ')}
+- Solved: ${leetcode.totalSolved} total (${leetcode.easySolved} Easy, ${leetcode.mediumSolved} Med, ${leetcode.hardSolved} Hard)
+- Acceptance: ${leetcode.acceptanceRate}% | Hard-to-Easy Ratio: ${leetcode.hardToEasyRatio}% | Algo Mastery: ${leetcode.algoMasteryScore}/99
+- Top Languages: ${leetcode.topLanguages.join(', ')}
 `
-          : 'No LeetCode profile linked (probably avoiding DP questions).'
+          : 'No LeetCode profile linked (wisely avoiding DP trauma).'
       }
 
-Instructions:
-Respond ONLY with a valid JSON object matching this exact TypeScript structure without any markdown wrap or extra commentary:
+Output MUST be a single raw JSON object matching this exact interface:
 {
-  "archetype": "A creative, witty 2-4 word developer archetype name (e.g. 'Night-Owl Async Maestro', 'DP Ghosting Refactorer')",
-  "tagline": "A funny 1-sentence summary of their dev style",
-  "auraColor": "Choose one exact value: 'cyberpunk' or 'solar-flare' or 'emerald-matrix' or 'deep-space' or 'laser-violet'",
-  "auraScore": "An integer score between 55 and 99 reflecting their overall aura",
-  "keyVibe": "A 2-3 word vibe badge (e.g. 'Ship Fast, Fix Later')",
+  "archetype": "Creative 2-4 word dev archetype (e.g., 'Async Midnight Architect')",
+  "tagline": "Witty 1-sentence summary of their dev personality",
+  "auraColor": "Choose ONE: 'cyberpunk' | 'solar-flare' | 'emerald-matrix' | 'deep-space' | 'laser-violet'",
+  "auraScore": 85,
+  "keyVibe": "2-3 word badge",
   "observations": [
-    "Observation 1 mentioning real stat (e.g. repo count, top language %, night owl %)",
-    "Observation 2 mentioning real stat or coding habit",
-    "Observation 3 mentioning another real stat",
-    "Observation 4 fun observation"
+    "5 specific observations citing exact metrics (stars, top language %, night owl %, PR count, etc)"
   ],
-  "roastOrPraise": "A witty 1-2 sentence roast or praise about their LeetCode/GitHub habits"
+  "roastOrPraise": "1-2 sentence roast or praise about their stack and LeetCode habits",
+  "devNemesis": "Funny dev persona they would clash with in PR reviews",
+  "recommendedStack": "A hilarious ideal tech stack tailored to them",
+  "radarStats": {
+    "velocity": 80,
+    "clarity": 85,
+    "algorithms": 75,
+    "stamina": 90,
+    "impact": 70
+  }
 }`
 
+      // Using Llama-3.1-8b-instruct for ultra-fast response speed (sub-second token generation)
       const response = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -67,20 +80,20 @@ Respond ONLY with a valid JSON object matching this exact TypeScript structure w
           Accept: 'application/json',
         },
         body: JSON.stringify({
-          model: 'meta/llama-3.3-70b-instruct',
+          model: 'meta/llama-3.1-8b-instruct',
           messages: [
             {
               role: 'system',
               content:
-                'You are an expert AI persona generator outputting pure raw JSON only.',
+                'You are an AI code analyst that outputs pure JSON without markdown format.',
             },
             {
               role: 'user',
               content: prompt,
             },
           ],
-          temperature: 0.7,
-          max_tokens: 800,
+          temperature: 0.65,
+          max_tokens: 650,
         }),
       })
 
@@ -89,7 +102,6 @@ Respond ONLY with a valid JSON object matching this exact TypeScript structure w
         const textOutput = resData.choices?.[0]?.message?.content?.trim()
 
         if (textOutput) {
-          // Remove any potential codeblock wrapping ```json ... ```
           const jsonString = textOutput
             .replace(/^```json/g, '')
             .replace(/^```/g, '')
@@ -102,14 +114,13 @@ Respond ONLY with a valid JSON object matching this exact TypeScript structure w
           }
         }
       } else {
-        console.warn(`NVIDIA NIM API response error HTTP ${response.status}`)
+        console.warn(`NVIDIA NIM API HTTP ${response.status}`)
       }
     } catch (err) {
-      console.warn('NVIDIA NIM AI generation failed, using intelligent rule-based fallback:', err)
+      console.warn('NVIDIA NIM AI generation fallback invoked:', err)
     }
   }
 
-  // Fallback Rule-Based Generation if AI key missing or endpoint unavailable
   return generateFallbackSummary(github, leetcode)
 }
 
@@ -117,36 +128,35 @@ function generateFallbackSummary(
   github: GitHubUserStats,
   leetcode: LeetCodeUserStats | null
 ): AISummary {
-  const isNightOwl = github.nightOwlScore > 35
+  const isNightOwl = github.nightOwlScore > 30
   const isTypeScript = github.topLanguage.toLowerCase().includes('type')
   const isPython = github.topLanguage.toLowerCase().includes('python')
-  const isHighStars = github.totalStars > 10
+  const isGo = github.topLanguage.toLowerCase().includes('go')
 
   let archetype = 'Caffeinated Full-Stack Artisan'
   let auraColor: AISummary['auraColor'] = 'cyberpunk'
 
   if (isNightOwl) {
-    archetype = 'Midnight Commit Goblin'
+    archetype = 'Midnight Async Goblin'
     auraColor = 'deep-space'
   } else if (isTypeScript) {
     archetype = 'Strict-Type Evangelist'
     auraColor = 'laser-violet'
   } else if (isPython) {
-    archetype = 'AI & Automation Wizard'
+    archetype = 'AI & Data Pipeline Wizard'
     auraColor = 'emerald-matrix'
-  } else if (isHighStars) {
-    archetype = 'Open Source Luminary'
+  } else if (isGo) {
+    archetype = 'Concurrency Microservice Titan'
     auraColor = 'solar-flare'
   }
 
   const observations: string[] = [
-    `${github.topLanguage} dominates your stack with ${github.languages[0]?.percentage || 60}% of overall repositories.`,
-    isNightOwl
-      ? `${github.nightOwlScore}% of repo updates happen after sunset. Sleep is clearly an optional dependency.`
-      : `Maintains a structured workflow across ${github.publicRepos} public repositories.`,
+    `${github.topLanguage} dominates your workflow with ${github.languages[0]?.percentage || 60}% of overall repositories.`,
+    `Primary work window: ${github.timeSlot} with ${github.nightOwlScore}% late-night activity.`,
+    `Code complexity rating stands at ${github.codeComplexityScore}/99 across ${github.publicRepos} repositories.`,
     github.totalStars > 0
-      ? `Earned ${github.totalStars} total stars from the developer community.`
-      : `Building up a portfolio with ${github.publicRepos} public code repositories.`,
+      ? `Earned ${github.totalStars} community stars across your open-source repositories.`
+      : `Active builder pushing ${github.recentCommitCount} recent commits & PRs.`,
   ]
 
   let roastOrPraise = ''
@@ -156,29 +166,37 @@ function generateFallbackSummary(
       `Solved ${leetcode.totalSolved} LeetCode challenges (${leetcode.easySolved} Easy, ${leetcode.mediumSolved} Medium, ${leetcode.hardSolved} Hard).`
     )
     if (leetcode.hardSolved > 5) {
-      roastOrPraise = `Praise: Conquered ${leetcode.hardSolved} Hard LeetCode problems! Interviewers should be interviewing you.`
-    } else if (leetcode.mediumSolved > 15) {
-      roastOrPraise = `Balanced Warrior: Solid grasp on Mediums (${leetcode.mediumSolved} solved), but treats Hard problems like production deployment on Friday.`
+      roastOrPraise = `Algorithmic Dominance: Solved ${leetcode.hardSolved} Hard LeetCode puzzles. Interviewers end up asking YOU for advice.`
     } else {
-      roastOrPraise = `Warm-Up Maestro: Cruising through Easy problems with an acceptance rate of ${leetcode.acceptanceRate}%.`
+      roastOrPraise = `Steady Solver: Maintained an acceptance rate of ${leetcode.acceptanceRate}% with an Algorithmic Mastery score of ${leetcode.algoMasteryScore}/99.`
     }
   } else {
-    observations.push('Has zero public LeetCode stats attached — wisely preserving peace of mind.')
-    roastOrPraise = `LeetCode Stealth Mode: Skipping online algorithm puzzles to actually ship code to GitHub.`
+    observations.push('Has zero public LeetCode handles attached — preserving peace of mind.')
+    roastOrPraise = `Practical Builder: Skipping online puzzle grinders to actually ship code to GitHub.`
   }
 
-  const scoreBase = Math.min(
-    98,
-    Math.max(62, github.publicRepos * 2 + github.totalStars * 3 + (leetcode?.totalSolved || 15))
-  )
+  const velocity = Math.min(99, Math.max(50, github.recentCommitCount * 4 + 45))
+  const clarity = Math.min(99, Math.max(55, github.codeComplexityScore))
+  const algorithms = leetcode ? Math.min(99, leetcode.algoMasteryScore + 20) : 55
+  const stamina = Math.min(99, Math.max(60, github.nightOwlScore + 40))
+  const impact = Math.min(99, Math.max(45, github.totalStars * 4 + github.followers * 2 + 35))
 
   return {
     archetype,
-    tagline: `Crafting code with ${github.topLanguage} expertise and ${github.publicRepos} projects shipped.`,
+    tagline: `Crafting software in ${github.topLanguage} during ${github.timeSlot.toLowerCase()} hours.`,
     auraColor,
-    auraScore: scoreBase,
+    auraScore: Math.round((velocity + clarity + algorithms + stamina + impact) / 5),
     keyVibe: isNightOwl ? 'Midnight Syntax' : 'Precision Engineering',
     observations,
     roastOrPraise,
+    devNemesis: 'The Trailing Whitespace Linter Bot',
+    recommendedStack: `${github.topLanguage} + Next.js 16 + Neon Postgres + Vercel`,
+    radarStats: {
+      velocity,
+      clarity,
+      algorithms,
+      stamina,
+      impact,
+    },
   }
 }

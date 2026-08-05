@@ -8,6 +8,8 @@ export interface LeetCodeUserStats {
   ranking: number | null
   contributionPoints: number
   reputation: number
+  hardToEasyRatio: number
+  algoMasteryScore: number
   topLanguages: string[]
 }
 
@@ -126,6 +128,14 @@ export async function fetchLeetCodeStats(username: string): Promise<LeetCodeUser
       .slice(0, 3)
       .map((l: any) => l.languageName)
 
+    const hardToEasyRatio =
+      easySolved > 0 ? parseFloat(((hardSolved / easySolved) * 100).toFixed(1)) : 0
+
+    const algoMasteryScore = Math.min(
+      99,
+      Math.round(easySolved * 0.15 + mediumSolved * 0.5 + hardSolved * 1.8)
+    )
+
     return {
       username: matchedUser.username || cleanUsername,
       totalSolved,
@@ -136,6 +146,8 @@ export async function fetchLeetCodeStats(username: string): Promise<LeetCodeUser
       ranking: matchedUser.profile?.ranking || null,
       contributionPoints: matchedUser.contributions?.points || 0,
       reputation: matchedUser.profile?.reputation || 0,
+      hardToEasyRatio,
+      algoMasteryScore,
       topLanguages: topLanguages.length > 0 ? topLanguages : ['Python', 'C++'],
     }
   } catch (error) {

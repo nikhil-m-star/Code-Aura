@@ -9,15 +9,26 @@ export interface GitHubUserStats {
   createdAt: string
   totalStars: number
   totalForks: number
+  originalReposCount: number
+  forkedReposCount: number
+  originalityRatio: number // % of non-forked original repos
   topLanguage: string
   languages: { name: string; percentage: number; color: string }[]
-  nightOwlScore: number // percentage estimated night/late activity
+  topTopics: string[]
+  nightOwlScore: number
+  timeSlot: 'Late Night (11PM-4AM)' | 'Early Bird (5AM-9AM)' | 'Day Grinder (10AM-5PM)' | 'Evening Builder (6PM-10PM)'
+  recentCommitCount: number
+  pullRequestCount: number
+  issueCount: number
+  codeComplexityScore: number
+  commitKeywords: string[]
   topRepos: {
     name: string
     stars: number
     language: string | null
     description: string | null
     url: string
+    isFork: boolean
   }[]
   accountAgeYears: number
 }
@@ -49,11 +60,27 @@ export async function fetchGitHubStats(username: string): Promise<GitHubUserStat
     'User-Agent': 'CodeAura-App',
   }
 
-  // Fetch User Info
-  const userRes = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}`, {
-    headers,
-    next: { revalidate: 300 },
-  })
+  // Fetch User Profile, Repos, and Public Events concurrently
+  const [userRes, reposRes, eventsRes] = await Promise.all([
+    fetch(`https://api.github.com/users/${encodeURIComponent(username)}`, {
+      headers,
+      next: { revalidate: 300 },
+    }),
+    fetch(
+      `https://api.github.com/users/${encodeURIComponent(username)}/repos?per_page=100&sort=updated`,
+      {
+        headers,
+        next: { revalidate: 300 },
+      }
+    ),
+    fetch(
+      `https://api.github.com/users/${encodeURIComponent(username)}/events/public?per_page=100`,
+      {
+        headers,
+        next: { revalidate: 180 },
+      }
+    ),
+  ])
 
   if (!userRes.ok) {
     if (userRes.status === 404) {
@@ -64,39 +91,43 @@ export async function fetchGitHubStats(username: string): Promise<GitHubUserStat
 
   const userData = await userRes.json()
 
-  // Fetch Repos
-  const reposRes = await fetch(
-    `https://api.github.com/users/${encodeURIComponent(username)}/repos?per_page=100&sort=updated`,
-    {
-      headers,
-      next: { revalidate: 300 },
-    }
-  )
-
   let repos = []
   if (reposRes.ok) {
     repos = await reposRes.json()
   }
 
+  let events = []
+  if (eventsRes.ok) {
+    events = await eventsRes.json()
+  }
+
+  // Process Repos & Language / Topic / Fork Breakdown
   let totalStars = 0
   let totalForks = 0
+  let originalReposCount = 0
+  let forkedReposCount = 0
+
   const languageCounts: Record<string, number> = {}
-  let lateNightCount = 0
+  const topicMap: Record<string, number> = {}
 
   const processedRepos = repos.map((repo: any) => {
     totalStars += repo.stargazers_count || 0
     totalForks += repo.forks_count || 0
 
+    if (repo.fork) {
+      forkedReposCount++
+    } else {
+      originalReposCount++
+    }
+
     if (repo.language) {
       languageCounts[repo.language] = (languageCounts[repo.language] || 0) + 1
     }
 
-    // Check last update time for night owl estimation
-    if (repo.pushed_at) {
-      const pushHour = new Date(repo.pushed_at).getUTCHours()
-      if (pushHour >= 20 || pushHour <= 4) {
-        lateNightCount++
-      }
+    if (Array.isArray(repo.topics)) {
+      repo.topics.forEach((t: string) => {
+        topicMap[t] = (topicMap[t] || 0) + 1
+      })
     }
 
     return {
@@ -105,8 +136,72 @@ export async function fetchGitHubStats(username: string): Promise<GitHubUserStat
       language: repo.language || null,
       description: repo.description || null,
       url: repo.html_url,
+      isFork: Boolean(repo.fork),
     }
   })
+
+  const originalityRatio =
+    repos.length > 0 ? Math.round((originalReposCount / repos.length) * 100) : 100
+
+  // Top Topic Badges
+  const topTopics = Object.entries(topicMap)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([t]) => t)
+
+  // Deep Events Analysis (Commit Velocity, PRs, Commit Message Sentiment/Keywords)
+  let recentCommitCount = 0
+  let pullRequestCount = 0
+  let issueCount = 0
+  const hourBuckets = { lateNight: 0, earlyBird: 0, dayGrinder: 0, evening: 0 }
+  const keywordCounts: Record<string, number> = {}
+
+  events.forEach((ev: any) => {
+    const createdAt = new Date(ev.created_at)
+    const hour = createdAt.getUTCHours()
+
+    if (hour >= 23 || hour <= 4) hourBuckets.lateNight++
+    else if (hour >= 5 && hour <= 9) hourBuckets.earlyBird++
+    else if (hour >= 10 && hour <= 17) hourBuckets.dayGrinder++
+    else hourBuckets.evening++
+
+    if (ev.type === 'PushEvent') {
+      recentCommitCount += ev.payload?.size || 1
+      const commits = ev.payload?.commits || []
+      commits.forEach((c: any) => {
+        const msg = (c.message || '').toLowerCase()
+        if (msg.includes('fix')) keywordCounts['bugfix'] = (keywordCounts['bugfix'] || 0) + 1
+        if (msg.includes('refactor')) keywordCounts['refactor'] = (keywordCounts['refactor'] || 0) + 1
+        if (msg.includes('feat') || msg.includes('add')) keywordCounts['feature'] = (keywordCounts['feature'] || 0) + 1
+        if (msg.includes('wip')) keywordCounts['wip'] = (keywordCounts['wip'] || 0) + 1
+        if (msg.includes('test')) keywordCounts['testing'] = (keywordCounts['testing'] || 0) + 1
+      })
+    } else if (ev.type === 'PullRequestEvent') {
+      pullRequestCount++
+    } else if (ev.type === 'IssuesEvent' || ev.type === 'IssueCommentEvent') {
+      issueCount++
+    }
+  })
+
+  const commitKeywords = Object.entries(keywordCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3)
+    .map(([kw]) => kw)
+
+  const totalEventCount = events.length || 1
+  const nightOwlScore = Math.round((hourBuckets.lateNight / totalEventCount) * 100)
+
+  let timeSlot: GitHubUserStats['timeSlot'] = 'Day Grinder (10AM-5PM)'
+  const maxBucket = Math.max(
+    hourBuckets.lateNight,
+    hourBuckets.earlyBird,
+    hourBuckets.dayGrinder,
+    hourBuckets.evening
+  )
+
+  if (maxBucket === hourBuckets.lateNight) timeSlot = 'Late Night (11PM-4AM)'
+  else if (maxBucket === hourBuckets.earlyBird) timeSlot = 'Early Bird (5AM-9AM)'
+  else if (maxBucket === hourBuckets.evening) timeSlot = 'Evening Builder (6PM-10PM)'
 
   // Top starred repos
   const topRepos = [...processedRepos].sort((a, b) => b.stars - a.stars).slice(0, 5)
@@ -127,8 +222,16 @@ export async function fetchGitHubStats(username: string): Promise<GitHubUserStat
   const currentYear = new Date().getFullYear()
   const accountAgeYears = Math.max(1, currentYear - createdYear)
 
-  const nightOwlScore = Math.round(
-    (lateNightCount / Math.max(1, repos.length)) * 100
+  // Code Complexity Score
+  const languageDiversity = Object.keys(languageCounts).length
+  const codeComplexityScore = Math.min(
+    99,
+    Math.round(
+      Math.min(40, repos.length * 0.8) +
+        Math.min(30, totalStars * 1.5) +
+        Math.min(20, languageDiversity * 3) +
+        Math.min(10, recentCommitCount * 0.2)
+    )
   )
 
   return {
@@ -142,9 +245,19 @@ export async function fetchGitHubStats(username: string): Promise<GitHubUserStat
     createdAt: userData.created_at,
     totalStars,
     totalForks,
+    originalReposCount,
+    forkedReposCount,
+    originalityRatio,
     topLanguage,
     languages,
+    topTopics,
     nightOwlScore,
+    timeSlot,
+    recentCommitCount,
+    pullRequestCount,
+    issueCount,
+    codeComplexityScore,
+    commitKeywords,
     topRepos,
     accountAgeYears,
   }
