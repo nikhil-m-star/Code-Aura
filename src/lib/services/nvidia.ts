@@ -31,8 +31,8 @@ export async function generateAISummary(
   if (apiKey) {
     try {
       const prompt = `Analyze this dev profile & generate a hilarious roast and epic praise JSON:
-GitHub: ${github.username} | TopLang: ${github.topLanguage} (${github.languages.map((l) => `${l.name}:${l.percentage}%`).join(', ')}) | Repos: ${github.publicRepos} | Stars: ${github.totalStars} | WorkWindow: ${github.timeSlot} | NightOwl: ${github.nightOwlScore}% | Complexity: ${github.codeComplexityScore}/99
-LeetCode: ${leetcode ? `Solved:${leetcode.totalSolved} (E:${leetcode.easySolved}, M:${leetcode.mediumSolved}, H:${leetcode.hardSolved}) | Acc:${leetcode.acceptanceRate}% | Mastery:${leetcode.algoMasteryScore}/99` : 'None'}
+GitHub: ${github.username} | TopLang: ${github.topLanguage} (${github.languages.map((l) => `${l.name}:${l.percentage}%`).join(', ')}) | Repos: ${github.publicRepos} | Stars: ${github.totalStars} | WorkWindow: ${github.timeSlot} | NightOwl: ${github.nightOwlScore}% | Complexity: ${github.codeComplexityScore}/100
+LeetCode: ${leetcode ? `Solved:${leetcode.totalSolved} (E:${leetcode.easySolved}, M:${leetcode.mediumSolved}, H:${leetcode.hardSolved}) | Acc:${leetcode.acceptanceRate}% | Mastery:${leetcode.algoMasteryScore}/100` : 'None'}
 
 Return ONLY raw JSON matching:
 {
@@ -132,7 +132,7 @@ function generateFallbackSummary(
   const observations: string[] = [
     `${github.topLanguage} dominates your workflow with ${github.languages[0]?.percentage || 60}% of overall repositories.`,
     `Primary work window: ${github.timeSlot} with ${github.nightOwlScore}% late-night activity.`,
-    `Code complexity rating stands at ${github.codeComplexityScore}/99 across ${github.publicRepos} repositories.`,
+    `Code complexity rating stands at ${github.codeComplexityScore}/100 across ${github.publicRepos} repositories.`,
     github.totalStars > 0
       ? `Earned ${github.totalStars} community stars across your open-source repositories.`
       : `Active builder pushing ${github.recentCommitCount} recent commits & PRs.`,
@@ -150,7 +150,7 @@ function generateFallbackSummary(
       praise = `Algorithmic Genius: Conquered ${leetcode.hardSolved} Hard LeetCode problems! Tech interviewers end up asking YOU for career advice.`
     } else {
       roast = `Treats Medium LeetCode problems like production deployments on a Friday afternoon — approached with intense anxiety.`
-      praise = `Consistent Solver: Maintained an impressive acceptance rate of ${leetcode.acceptanceRate}% with an Algorithmic Mastery score of ${leetcode.algoMasteryScore}/99.`
+      praise = `Consistent Solver: Maintained an impressive acceptance rate of ${leetcode.acceptanceRate}% with an Algorithmic Mastery score of ${leetcode.algoMasteryScore}/100.`
     }
   } else {
     observations.push('Has zero public LeetCode handles attached — preserving peace of mind.')
@@ -158,11 +158,11 @@ function generateFallbackSummary(
     praise = `Pragmatic Titan: Bypasses online puzzle grinding to ship actual working code directly to GitHub production.`
   }
 
-  const velocity = Math.min(99, Math.max(50, github.recentCommitCount * 4 + 45))
-  const clarity = Math.min(99, Math.max(55, github.codeComplexityScore))
-  const algorithms = leetcode ? Math.min(99, leetcode.algoMasteryScore + 20) : 55
-  const stamina = Math.min(99, Math.max(60, github.nightOwlScore + 40))
-  const impact = Math.min(99, Math.max(45, github.totalStars * 4 + github.followers * 2 + 35))
+  const velocity = Math.min(100, Math.max(50, github.recentCommitCount * 4 + 45))
+  const clarity = Math.min(100, Math.max(55, github.codeComplexityScore))
+  const algorithms = leetcode ? Math.min(100, leetcode.algoMasteryScore + 10) : 55
+  const stamina = Math.min(100, Math.max(60, github.nightOwlScore + 40))
+  const impact = Math.min(100, Math.max(45, github.totalStars * 4 + github.followers * 2 + 35))
 
   return {
     archetype,

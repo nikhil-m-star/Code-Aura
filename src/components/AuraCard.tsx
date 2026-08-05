@@ -144,7 +144,7 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
       <div className="p-6 rounded-2xl bg-[#141414] space-y-4">
         <div className="flex items-center justify-between text-xs font-bold uppercase tracking-widest text-gray-400">
           <span>Performance Ratings</span>
-          <span className="text-fuchsia-400 font-bold">Complexity: {github.codeComplexityScore}/99</span>
+          <span className="text-fuchsia-400 font-bold">Complexity: {github.codeComplexityScore}/100</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
@@ -260,7 +260,7 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
               </div>
               <div className="flex justify-between text-xs text-gray-400 pt-1">
                 <span>Algo Rating</span>
-                <span className="text-amber-300 font-bold">{leetcode.algoMasteryScore}/99</span>
+                <span className="text-amber-300 font-bold">{leetcode.algoMasteryScore}/100</span>
               </div>
             </>
           ) : (

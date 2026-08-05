@@ -88,7 +88,7 @@ export default function HistoryPage() {
 
               <div className="pt-3 flex items-center justify-between text-xs">
                 <span className="font-bold text-white">
-                  Score: {item.aiSummary?.auraScore || 80}/99
+                  Score: {item.aiSummary?.auraScore || 80}/100
                 </span>
                 <span className="flex items-center gap-1 text-gray-400 group-hover:text-white transition-colors">
                   <span>View</span>

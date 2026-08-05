@@ -222,15 +222,15 @@ export async function fetchGitHubStats(username: string): Promise<GitHubUserStat
   const currentYear = new Date().getFullYear()
   const accountAgeYears = Math.max(1, currentYear - createdYear)
 
-  // Code Complexity Score
+  // Robust & Balanced Code Complexity Rating out of 100
   const languageDiversity = Object.keys(languageCounts).length
   const codeComplexityScore = Math.min(
-    99,
+    100,
     Math.round(
-      Math.min(40, repos.length * 0.8) +
-        Math.min(30, totalStars * 1.5) +
-        Math.min(20, languageDiversity * 3) +
-        Math.min(10, recentCommitCount * 0.2)
+      Math.min(35, repos.length * 1.2) +
+        Math.min(30, totalStars * 2) +
+        Math.min(20, languageDiversity * 4) +
+        Math.min(15, recentCommitCount * 0.4)
     )
   )
 
