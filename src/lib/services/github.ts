@@ -48,7 +48,7 @@ const LANGUAGE_COLORS: Record<string, string> = {
   PHP: '#4F5D95',
   Ruby: '#701516',
   Swift: '#F05138',
-  Kotlin: '#A97BFF',
+  Kotlin: '#d946ef',
   Dart: '#00B4AB',
   Shell: '#89e051',
   Vue: '#41b883',
@@ -215,7 +215,7 @@ export async function fetchGitHubStats(username: string): Promise<GitHubUserStat
   const languages = sortedLanguages.slice(0, 5).map(([name, count]) => ({
     name,
     percentage: Math.round((count / totalRepoCount) * 100),
-    color: LANGUAGE_COLORS[name] || '#8b5cf6',
+    color: LANGUAGE_COLORS[name] || '#d946ef',
   }))
 
   const createdYear = new Date(userData.created_at).getFullYear()
