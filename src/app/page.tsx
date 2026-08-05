@@ -4,6 +4,17 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth, SignInButton } from '@clerk/nextjs'
 import { ArrowRight, Loader2 } from 'lucide-react'
+import { GithubIcon } from '@/components/GithubIcon'
+import {
+  LeetCodeLogo,
+  ReactLogo,
+  TypeScriptLogo,
+  PythonLogo,
+  PostgreSQLLogo,
+  TailwindLogo,
+  NextjsLogo,
+  PrismaLogo,
+} from '@/components/BrandLogos'
 import { analyzeDeveloperAction } from '@/app/actions/analysis'
 
 const DYNAMIC_PROCESSING_TEXTS = [
@@ -105,7 +116,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center px-4 py-16 bg-black min-h-[75vh]">
+    <div className="flex-1 flex flex-col items-center justify-center px-4 py-16 bg-black min-h-[75vh] font-sans">
       {/* LOADING STATE - SHOW ONLY DYNAMIC PROCESSING TEXT + REAL LOGOS SLIDING RIGHT TO LEFT */}
       {isAnalyzing ? (
         <div className="max-w-2xl w-full text-center space-y-10 py-12">
@@ -114,10 +125,10 @@ export default function HomePage() {
             <div className="w-10 h-10 rounded-full bg-fuchsia-500/20 text-fuchsia-400 mx-auto flex items-center justify-center animate-spin">
               <Loader2 className="w-6 h-6" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-white font-mono tracking-tight transition-all duration-500">
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight transition-all duration-500">
               {DYNAMIC_PROCESSING_TEXTS[processingTextIdx]}
             </h2>
-            <p className="text-xs font-mono text-gray-500">Building your developer aura card...</p>
+            <p className="text-xs text-gray-500">Building your developer aura card...</p>
           </div>
 
           {/* Sliding Tech Ticker Marquee with REAL Official Logo Images */}
@@ -130,7 +141,7 @@ export default function HomePage() {
                     className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-[#161616] shrink-0"
                   >
                     <img src={item.src} alt={item.name} className="w-5 h-5 object-contain" />
-                    <span className="text-xs font-mono font-bold text-gray-200">
+                    <span className="text-xs font-bold text-gray-200">
                       {item.name}
                     </span>
                   </div>
@@ -160,7 +171,7 @@ export default function HomePage() {
                 placeholder="e.g. torvalds"
                 value={githubUsername}
                 onChange={(e) => setGithubUsername(e.target.value)}
-                className="w-full bg-[#141414] focus:bg-[#1c1c1c] text-white px-4 py-3.5 rounded-2xl font-mono text-sm border-0 outline-none transition-all placeholder-gray-600"
+                className="w-full bg-[#141414] focus:bg-[#1c1c1c] text-white px-4 py-3.5 rounded-2xl text-sm border-0 outline-none transition-all placeholder-gray-600 font-sans"
               />
             </div>
 
@@ -174,7 +185,7 @@ export default function HomePage() {
                 placeholder="e.g. neetcode"
                 value={leetcodeUsername}
                 onChange={(e) => setLeetcodeUsername(e.target.value)}
-                className="w-full bg-[#141414] focus:bg-[#1c1c1c] text-white px-4 py-3.5 rounded-2xl font-mono text-sm border-0 outline-none transition-all placeholder-gray-600"
+                className="w-full bg-[#141414] focus:bg-[#1c1c1c] text-white px-4 py-3.5 rounded-2xl text-sm border-0 outline-none transition-all placeholder-gray-600 font-sans"
               />
             </div>
 

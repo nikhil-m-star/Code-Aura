@@ -29,10 +29,10 @@ export default function HistoryPage() {
   }, [])
 
   return (
-    <div className="flex-1 max-w-4xl w-full mx-auto px-4 py-10 space-y-8 bg-black">
+    <div className="flex-1 max-w-4xl w-full mx-auto px-4 py-10 space-y-8 bg-black font-sans">
       <div className="flex items-center justify-between pb-4">
         <div>
-          <span className="text-xs font-mono text-gray-500 uppercase tracking-widest block mb-1">
+          <span className="text-xs text-gray-500 uppercase tracking-widest block mb-1 font-bold">
             Vault
           </span>
           <h1 className="text-3xl font-extrabold text-white">Your Saved Auras</h1>
@@ -47,7 +47,7 @@ export default function HistoryPage() {
       </div>
 
       {loading ? (
-        <div className="py-16 text-center text-gray-500 font-mono text-sm">
+        <div className="py-16 text-center text-gray-500 text-sm font-medium">
           Loading history...
         </div>
       ) : history.length === 0 ? (
@@ -72,7 +72,7 @@ export default function HistoryPage() {
               className="p-5 rounded-2xl bg-[#0c0c0c] hover:bg-[#141414] transition-all flex flex-col justify-between space-y-4 group"
             >
               <div>
-                <div className="flex items-center justify-between text-xs text-gray-500 font-mono mb-2">
+                <div className="flex items-center justify-between text-xs text-gray-500 font-bold mb-2">
                   <span>@{item.githubUsername}</span>
                   <span>{new Date(item.createdAt).toLocaleDateString()}</span>
                 </div>
@@ -87,7 +87,7 @@ export default function HistoryPage() {
               </div>
 
               <div className="pt-3 flex items-center justify-between text-xs">
-                <span className="font-semibold text-white font-mono">
+                <span className="font-bold text-white">
                   Score: {item.aiSummary?.auraScore || 80}/99
                 </span>
                 <span className="flex items-center gap-1 text-gray-400 group-hover:text-white transition-colors">
