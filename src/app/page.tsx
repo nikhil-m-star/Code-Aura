@@ -21,7 +21,7 @@ const REAL_BRAND_IMAGE_LOGOS = [
   },
   {
     name: 'LeetCode',
-    src: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%23FFA116" d="M16.102 17.93l-2.697 2.607c-.766.741-1.993.741-2.759 0l-6.837-6.608c-.766-.741-.766-1.925 0-2.666l6.837-6.608c.766-.741 1.993-.741 2.759 0l2.697 2.607c.383.37.996.37 1.379 0 .383-.37.383-.963 0-1.333l-2.697-2.607c-1.532-1.482-3.987-1.482-5.519 0l-6.837 6.608c-1.532 1.482-1.532 3.849 0 5.331l6.837 6.608c1.532 1.482 3.987 1.482 5.519 0l2.697-2.607c.383-.37.383-.963 0-1.333-.383-.37-.996-.37-1.379 0z"/><path fill="%23FFFFFF" d="M20.25 12h-9.5c-.552 0-1-.448-1-1s.448-1 1-1h9.5c.552 0 1 .448 1 1s-.448 1-1 1z"/></svg>',
+    src: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="64" height="64"><path fill="%23FFA116" d="M16.102 17.93l-2.697 2.607c-.766.741-1.993.741-2.759 0l-6.837-6.608c-.766-.741-.766-1.925 0-2.666l6.837-6.608c.766-.741 1.993-.741 2.759 0l2.697 2.607c.383.37.996.37 1.379 0 .383-.37.383-.963 0-1.333l-2.697-2.607c-1.532-1.482-3.987-1.482-5.519 0l-6.837 6.608c-1.532 1.482-1.532 3.849 0 5.331l6.837 6.608c1.532 1.482 3.987 1.482 5.519 0l2.697-2.607c.383-.37.383-.963 0-1.333-.383-.37-.996-.37-1.379 0z"/><path fill="%23FFFFFF" d="M20.25 12h-9.5c-.552 0-1-.448-1-1s.448-1 1-1h9.5c.552 0 1 .448 1 1s-.448 1-1 1z"/></svg>',
   },
   {
     name: 'TypeScript',
@@ -137,7 +137,8 @@ function DynamicScalingTicker({ logos }: { logos: typeof REAL_BRAND_IMAGE_LOGOS 
     return () => cancelAnimationFrame(animFrame)
   }, [])
 
-  const repeatedLogos = [...logos, ...logos, ...logos]
+  // Duplicate 4 times to guarantee a seamless, unbroken, 100% infinite circular loop
+  const repeatedLogos = [...logos, ...logos, ...logos, ...logos]
 
   return (
     <div
