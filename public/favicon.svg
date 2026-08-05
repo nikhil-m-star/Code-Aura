@@ -1,6 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
   <rect width="512" height="512" rx="120" fill="#000000"/>
-  <circle cx="256" cy="256" r="170" stroke="#FFFFFF" stroke-width="32" fill="none"/>
-  <path d="M 170 342 L 342 170" stroke="#FFFFFF" stroke-width="32" stroke-linecap="round"/>
-  <circle cx="256" cy="256" r="32" fill="#FFFFFF"/>
+  <circle cx="256" cy="256" r="175" stroke="#FFFFFF" stroke-width="22" fill="none"/>
+  <text x="256" y="300" fill="#FFFFFF" font-size="185" font-weight="900" font-family="system-ui, -apple-system, sans-serif" letter-spacing="-6" text-anchor="middle">CA</text>
 </svg>
