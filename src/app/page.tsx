@@ -17,11 +17,11 @@ const DYNAMIC_PROCESSING_TEXTS = [
 const REAL_BRAND_IMAGE_LOGOS = [
   {
     name: 'GitHub',
-    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg',
+    src: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>',
   },
   {
     name: 'LeetCode',
-    src: 'https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/leetcode.svg',
+    src: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%23FFA116" d="M16.102 17.93l-2.697 2.607c-.766.741-1.993.741-2.759 0l-6.837-6.608c-.766-.741-.766-1.925 0-2.666l6.837-6.608c.766-.741 1.993-.741 2.759 0l2.697 2.607c.383.37.996.37 1.379 0 .383-.37.383-.963 0-1.333l-2.697-2.607c-1.532-1.482-3.987-1.482-5.519 0l-6.837 6.608c-1.532 1.482-1.532 3.849 0 5.331l6.837 6.608c1.532 1.482 3.987 1.482 5.519 0l2.697-2.607c.383-.37.383-.963 0-1.333-.383-.37-.996-.37-1.379 0z"/><path fill="%23FFFFFF" d="M20.25 12h-9.5c-.552 0-1-.448-1-1s.448-1 1-1h9.5c.552 0 1 .448 1 1s-.448 1-1 1z"/></svg>',
   },
   {
     name: 'TypeScript',
@@ -235,14 +235,14 @@ export default function HomePage() {
           {/* Main Title */}
           <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-none font-sans">
             What Is Your <br />
-            <span className="text-fuchsia-400">Developer Aura?</span>
+            <span className="text-rose-500">Developer Aura?</span>
           </h1>
 
           {/* Input Form */}
           <form onSubmit={handleSubmit} className="mt-8 space-y-4 text-left">
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider font-sans">
-                GitHub Username <span className="text-fuchsia-400">*</span>
+                GitHub Username <span className="text-rose-500">*</span>
               </label>
               <input
                 type="text"
@@ -278,7 +278,7 @@ export default function HomePage() {
               <SignInButton mode="modal">
                 <button
                   type="button"
-                  className="w-full py-4 px-6 rounded-2xl font-bold text-black bg-fuchsia-400 hover:bg-fuchsia-300 transition-all text-sm cursor-pointer shadow-lg font-sans"
+                  className="w-full py-4 px-6 rounded-2xl font-bold text-white bg-rose-500 hover:bg-rose-600 transition-all text-sm cursor-pointer shadow-lg font-sans"
                 >
                   Sign In to Analyze Aura
                 </button>
@@ -286,7 +286,7 @@ export default function HomePage() {
             ) : (
               <button
                 type="submit"
-                className="w-full py-4 px-6 rounded-2xl font-bold text-black bg-fuchsia-400 hover:bg-fuchsia-300 transition-all text-sm flex items-center justify-center gap-2 cursor-pointer shadow-lg font-sans"
+                className="w-full py-4 px-6 rounded-2xl font-bold text-white bg-rose-500 hover:bg-rose-600 transition-all text-sm flex items-center justify-center gap-2 cursor-pointer shadow-lg font-sans"
               >
                 <span>Generate Developer Aura</span>
                 <ArrowRight className="w-4 h-4" />
