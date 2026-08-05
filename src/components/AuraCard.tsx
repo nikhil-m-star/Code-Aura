@@ -13,13 +13,13 @@ interface AuraCardProps {
   cardRef?: React.RefObject<HTMLDivElement | null>
 }
 
-// 100% Solid Color Number Badges
-const SOLID_OBS_BADGES = [
-  'bg-rose-500 text-white font-black',
-  'bg-emerald-500 text-white font-black',
-  'bg-cyan-500 text-white font-black',
-  'bg-amber-500 text-white font-black',
-  'bg-fuchsia-500 text-white font-black',
+// 100% Solid Vibrant Pop-Color Observations
+const VIBRANT_OBS_CARDS = [
+  'bg-rose-500 text-white',
+  'bg-emerald-500 text-white',
+  'bg-cyan-400 text-black font-semibold',
+  'bg-amber-400 text-black font-semibold',
+  'bg-fuchsia-500 text-white',
 ]
 
 export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRef }) => {
@@ -33,7 +33,7 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
 
   // Playful Tier Grade based on Aura Score
   let tierGrade = 'A-TIER'
-  let tierBadgeBg = 'bg-rose-500 text-white'
+  let tierBadgeBg = 'bg-rose-500 text-white font-black'
 
   if (ai.auraScore >= 92) {
     tierGrade = 'S-TIER GOD'
@@ -55,33 +55,33 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
   return (
     <div
       ref={cardRef}
-      className="w-full max-w-3xl mx-auto rounded-3xl p-6 md:p-10 bg-[#070707] text-white space-y-8 font-sans"
+      className="w-full max-w-3xl mx-auto rounded-3xl p-6 md:p-10 bg-black text-white space-y-8 font-sans"
     >
-      {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#181818]">
+      {/* Top Header Header Box - Solid Vibrant Navy */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl bg-blue-600 text-white">
         <div className="flex items-center gap-4">
           <img
             src={github.avatarUrl}
             alt={github.username}
-            className="w-16 h-16 rounded-2xl object-cover bg-[#161616]"
+            className="w-16 h-16 rounded-2xl object-cover bg-black"
           />
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               <h2 className="text-2xl font-black text-white tracking-tight">
                 {github.name || github.username}
               </h2>
-              <span className="text-xs font-bold text-rose-400">@{github.username}</span>
+              <span className="text-xs font-black text-yellow-300">@{github.username}</span>
             </div>
             <div className="flex items-center gap-2 mt-2 flex-wrap">
-              {/* Solid Badges */}
-              <span className="px-3 py-1 rounded-xl text-xs font-black bg-[#2d121c] text-rose-300">
+              {/* Vibrant Solid Badges */}
+              <span className="px-3 py-1 rounded-xl text-xs font-black bg-rose-500 text-white">
                 {github.topLanguage}
               </span>
-              <span className="px-3 py-1 rounded-xl text-xs font-black bg-[#0d2736] text-cyan-300">
+              <span className="px-3 py-1 rounded-xl text-xs font-black bg-cyan-400 text-black">
                 {github.timeSlot}
               </span>
               {leetcode && (
-                <span className="px-3 py-1 rounded-xl text-xs font-black bg-[#33220e] text-amber-300">
+                <span className="px-3 py-1 rounded-xl text-xs font-black bg-amber-400 text-black">
                   {leetcode.totalSolved} Solved
                 </span>
               )}
@@ -90,9 +90,9 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
         </div>
 
         {/* Playful Rating Badge */}
-        <div className="flex items-center gap-3.5 bg-[#141414] px-5 py-3.5 rounded-2xl self-start sm:self-auto">
+        <div className="flex items-center gap-3.5 bg-black px-5 py-3.5 rounded-2xl self-start sm:self-auto">
           <div className="flex flex-col items-end">
-            <span className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">
+            <span className="text-[10px] text-gray-300 uppercase tracking-widest font-bold">
               Aura Score
             </span>
             <span className={`text-[10px] px-2.5 py-0.5 rounded-md mt-0.5 ${tierBadgeBg}`}>
@@ -103,220 +103,218 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
         </div>
       </div>
 
-      {/* Archetype & Tagline - Solid Dark Crimson Box */}
-      <div className="p-6 rounded-2xl bg-[#181116] space-y-2">
-        <span className="text-[11px] text-rose-400 uppercase tracking-widest font-bold block">
+      {/* Archetype & Tagline - Solid Vibrant Fuchsia Box */}
+      <div className="p-6 rounded-3xl bg-fuchsia-600 text-white space-y-2">
+        <span className="text-[11px] text-fuchsia-200 uppercase tracking-widest font-black block">
           AI Archetype
         </span>
         <h3 className="text-2xl sm:text-3xl font-black text-white">
           "{ai.archetype}"
         </h3>
-        <p className="text-sm text-gray-300 italic pt-1">"{ai.tagline}"</p>
+        <p className="text-sm text-fuchsia-100 italic pt-1">"{ai.tagline}"</p>
       </div>
 
-      {/* DEDICATED SOLID ROAST & PRAISE BOXES */}
+      {/* DEDICATED VIBRANT SOLID ROAST & PRAISE BOXES */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* 🔥 THE ROAST - SOLID DARK CRIMSON */}
-        <div className="p-6 rounded-2xl bg-[#2a111a] space-y-2">
+        {/* 🔥 THE ROAST - SOLID VIBRANT ROSE */}
+        <div className="p-6 rounded-3xl bg-rose-600 text-white space-y-2">
           <div className="flex items-center gap-2">
             <span className="text-base">🔥</span>
-            <span className="text-[11px] text-rose-400 font-bold uppercase tracking-widest">
+            <span className="text-[11px] text-rose-200 font-black uppercase tracking-widest">
               The Roast
             </span>
           </div>
-          <p className="text-sm text-rose-100 font-medium leading-relaxed italic">
+          <p className="text-sm font-bold leading-relaxed italic text-white">
             "{roastText}"
           </p>
         </div>
 
-        {/* 👑 THE PRAISE - SOLID DARK EMERALD */}
-        <div className="p-6 rounded-2xl bg-[#0e271f] space-y-2">
+        {/* 👑 THE PRAISE - SOLID VIBRANT EMERALD */}
+        <div className="p-6 rounded-3xl bg-emerald-600 text-white space-y-2">
           <div className="flex items-center gap-2">
             <span className="text-base">👑</span>
-            <span className="text-[11px] text-emerald-400 font-bold uppercase tracking-widest">
+            <span className="text-[11px] text-emerald-200 font-black uppercase tracking-widest">
               The Praise
             </span>
           </div>
-          <p className="text-sm text-emerald-100 font-medium leading-relaxed italic">
+          <p className="text-sm font-bold leading-relaxed italic text-white">
             "{praiseText}"
           </p>
         </div>
       </div>
 
-      {/* Artistic 5-Axis Colorful Skill Ratings - SOLID CARDS */}
-      <div className="p-6 rounded-2xl bg-[#121212] space-y-4">
-        <div className="flex items-center justify-between text-xs font-bold uppercase tracking-widest text-gray-400">
+      {/* 5-Axis Skill Ratings - SOLID VIBRANT PURPLE CONTAINER */}
+      <div className="p-6 rounded-3xl bg-purple-600 text-white space-y-4">
+        <div className="flex items-center justify-between text-xs font-black uppercase tracking-widest text-purple-200">
           <span>Performance Ratings</span>
-          <span className="text-rose-400 font-bold">Complexity: {github.codeComplexityScore}/100</span>
+          <span className="text-yellow-300 font-black">Complexity: {github.codeComplexityScore}/100</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
           {/* Velocity */}
-          <div className="p-3.5 rounded-2xl bg-[#2b121f] space-y-2">
-            <div className="flex justify-between text-xs">
-              <span className="text-rose-300 font-bold">Velocity</span>
-              <span className="text-white font-bold">{radar.velocity}%</span>
+          <div className="p-4 rounded-2xl bg-fuchsia-500 text-white space-y-2">
+            <div className="flex justify-between text-xs font-black">
+              <span>Velocity</span>
+              <span>{radar.velocity}%</span>
             </div>
-            <div className="w-full h-2 bg-[#421b30] rounded-full overflow-hidden">
-              <div className="h-full bg-rose-500 rounded-full" style={{ width: `${radar.velocity}%` }} />
+            <div className="w-full h-2 bg-black/40 rounded-full overflow-hidden">
+              <div className="h-full bg-white rounded-full" style={{ width: `${radar.velocity}%` }} />
             </div>
           </div>
 
           {/* Clarity */}
-          <div className="p-3.5 rounded-2xl bg-[#0f291f] space-y-2">
-            <div className="flex justify-between text-xs">
-              <span className="text-emerald-300 font-bold">Clarity</span>
-              <span className="text-white font-bold">{radar.clarity}%</span>
+          <div className="p-4 rounded-2xl bg-emerald-500 text-white space-y-2">
+            <div className="flex justify-between text-xs font-black">
+              <span>Clarity</span>
+              <span>{radar.clarity}%</span>
             </div>
-            <div className="w-full h-2 bg-[#1b4233] rounded-full overflow-hidden">
-              <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${radar.clarity}%` }} />
+            <div className="w-full h-2 bg-black/40 rounded-full overflow-hidden">
+              <div className="h-full bg-white rounded-full" style={{ width: `${radar.clarity}%` }} />
             </div>
           </div>
 
           {/* Algorithms */}
-          <div className="p-3.5 rounded-2xl bg-[#2b1e0f] space-y-2">
-            <div className="flex justify-between text-xs">
-              <span className="text-amber-300 font-bold">Algo</span>
-              <span className="text-white font-bold">{radar.algorithms}%</span>
+          <div className="p-4 rounded-2xl bg-amber-400 text-black space-y-2 font-black">
+            <div className="flex justify-between text-xs font-black">
+              <span>Algo</span>
+              <span>{radar.algorithms}%</span>
             </div>
-            <div className="w-full h-2 bg-[#453018] rounded-full overflow-hidden">
-              <div className="h-full bg-amber-500 rounded-full" style={{ width: `${radar.algorithms}%` }} />
+            <div className="w-full h-2 bg-black/30 rounded-full overflow-hidden">
+              <div className="h-full bg-black rounded-full" style={{ width: `${radar.algorithms}%` }} />
             </div>
           </div>
 
           {/* Stamina */}
-          <div className="p-3.5 rounded-2xl bg-[#2d121c] space-y-2">
-            <div className="flex justify-between text-xs">
-              <span className="text-pink-300 font-bold">Stamina</span>
-              <span className="text-white font-bold">{radar.stamina}%</span>
+          <div className="p-4 rounded-2xl bg-rose-500 text-white space-y-2">
+            <div className="flex justify-between text-xs font-black">
+              <span>Stamina</span>
+              <span>{radar.stamina}%</span>
             </div>
-            <div className="w-full h-2 bg-[#471b2d] rounded-full overflow-hidden">
-              <div className="h-full bg-pink-500 rounded-full" style={{ width: `${radar.stamina}%` }} />
+            <div className="w-full h-2 bg-black/40 rounded-full overflow-hidden">
+              <div className="h-full bg-white rounded-full" style={{ width: `${radar.stamina}%` }} />
             </div>
           </div>
 
           {/* Impact */}
-          <div className="p-3.5 rounded-2xl bg-[#0e2736] space-y-2">
-            <div className="flex justify-between text-xs">
-              <span className="text-cyan-300 font-bold">Impact</span>
-              <span className="text-white font-bold">{radar.impact}%</span>
+          <div className="p-4 rounded-2xl bg-cyan-400 text-black space-y-2 font-black">
+            <div className="flex justify-between text-xs font-black">
+              <span>Impact</span>
+              <span>{radar.impact}%</span>
             </div>
-            <div className="w-full h-2 bg-[#1b3e54] rounded-full overflow-hidden">
-              <div className="h-full bg-cyan-500 rounded-full" style={{ width: `${radar.impact}%` }} />
+            <div className="w-full h-2 bg-black/30 rounded-full overflow-hidden">
+              <div className="h-full bg-black rounded-full" style={{ width: `${radar.impact}%` }} />
             </div>
           </div>
         </div>
       </div>
 
-      {/* GitHub & LeetCode Key Stats Grid - SOLID TILES */}
+      {/* GitHub & LeetCode Key Stats Grid - SOLID VIBRANT CONTAINERS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* GitHub Stats */}
-        <div className="p-5 rounded-2xl bg-[#121212] space-y-3">
-          <div className="flex items-center justify-between text-xs font-bold text-gray-400 uppercase tracking-widest">
+        {/* GitHub Stats - SOLID BLUE */}
+        <div className="p-6 rounded-3xl bg-blue-600 text-white space-y-4">
+          <div className="flex items-center justify-between text-xs font-black uppercase tracking-widest text-blue-200">
             <span>GitHub Metrics</span>
-            <span className="text-emerald-400 font-bold">{github.originalityRatio}% Original</span>
+            <span className="text-yellow-300 font-black">{github.originalityRatio}% Original</span>
           </div>
 
           <div className="grid grid-cols-3 gap-2 text-center">
-            <div className="p-3 rounded-xl bg-[#2e1d0c]">
-              <div className="text-lg font-black text-amber-400">{github.totalStars}</div>
-              <div className="text-[10px] text-amber-200 font-semibold">Stars</div>
+            <div className="p-3.5 rounded-2xl bg-amber-400 text-black font-black">
+              <div className="text-xl font-black">{github.totalStars}</div>
+              <div className="text-[10px] uppercase font-black">Stars</div>
             </div>
-            <div className="p-3 rounded-xl bg-[#0d2736]">
-              <div className="text-lg font-black text-cyan-400">{github.publicRepos}</div>
-              <div className="text-[10px] text-cyan-200 font-semibold">Repos</div>
+            <div className="p-3.5 rounded-2xl bg-cyan-400 text-black font-black">
+              <div className="text-xl font-black">{github.publicRepos}</div>
+              <div className="text-[10px] uppercase font-black">Repos</div>
             </div>
-            <div className="p-3 rounded-xl bg-[#2d121c]">
-              <div className="text-lg font-black text-pink-400">{github.followers}</div>
-              <div className="text-[10px] text-pink-200 font-semibold">Followers</div>
+            <div className="p-3.5 rounded-2xl bg-rose-500 text-white font-black">
+              <div className="text-xl font-black">{github.followers}</div>
+              <div className="text-[10px] uppercase font-black">Followers</div>
             </div>
           </div>
 
-          <div className="flex justify-between text-xs text-gray-400 pt-1">
+          <div className="flex justify-between text-xs font-bold pt-1 text-blue-100">
             <span>Primary Language</span>
-            <span className="text-rose-300 font-bold">{github.topLanguage}</span>
+            <span className="text-yellow-300 font-black">{github.topLanguage}</span>
           </div>
         </div>
 
-        {/* LeetCode Stats */}
-        <div className="p-5 rounded-2xl bg-[#121212] space-y-3">
-          <div className="flex items-center justify-between text-xs font-bold text-gray-400 uppercase tracking-widest">
+        {/* LeetCode Stats - SOLID INDIGO */}
+        <div className="p-6 rounded-3xl bg-indigo-600 text-white space-y-4">
+          <div className="flex items-center justify-between text-xs font-black uppercase tracking-widest text-indigo-200">
             <span>LeetCode Stats</span>
-            {leetcode && <span className="text-amber-400 font-bold">{leetcode.acceptanceRate}% Accuracy</span>}
+            {leetcode && <span className="text-yellow-300 font-black">{leetcode.acceptanceRate}% Accuracy</span>}
           </div>
 
           {leetcode ? (
             <>
               <div className="grid grid-cols-3 gap-2 text-center">
-                <div className="p-3 rounded-xl bg-[#0f291f]">
-                  <div className="text-lg font-black text-emerald-400">{leetcode.easySolved}</div>
-                  <div className="text-[10px] text-emerald-200 font-semibold">Easy</div>
+                <div className="p-3.5 rounded-2xl bg-emerald-400 text-black font-black">
+                  <div className="text-xl font-black">{leetcode.easySolved}</div>
+                  <div className="text-[10px] uppercase font-black">Easy</div>
                 </div>
-                <div className="p-3 rounded-xl bg-[#2b1e0f]">
-                  <div className="text-lg font-black text-amber-400">{leetcode.mediumSolved}</div>
-                  <div className="text-[10px] text-amber-200 font-semibold">Medium</div>
+                <div className="p-3.5 rounded-2xl bg-amber-400 text-black font-black">
+                  <div className="text-xl font-black">{leetcode.mediumSolved}</div>
+                  <div className="text-[10px] uppercase font-black">Medium</div>
                 </div>
-                <div className="p-3 rounded-xl bg-[#2d121c]">
-                  <div className="text-lg font-black text-rose-400">{leetcode.hardSolved}</div>
-                  <div className="text-[10px] text-rose-200 font-semibold">Hard</div>
+                <div className="p-3.5 rounded-2xl bg-rose-500 text-white font-black">
+                  <div className="text-xl font-black">{leetcode.hardSolved}</div>
+                  <div className="text-[10px] uppercase font-black">Hard</div>
                 </div>
               </div>
-              <div className="flex justify-between text-xs text-gray-400 pt-1">
+              <div className="flex justify-between text-xs font-bold pt-1 text-indigo-100">
                 <span>Algo Rating</span>
-                <span className="text-amber-300 font-bold">{leetcode.algoMasteryScore}/100</span>
+                <span className="text-yellow-300 font-black">{leetcode.algoMasteryScore}/100</span>
               </div>
             </>
           ) : (
-            <div className="py-6 text-center text-xs text-gray-500">
+            <div className="py-6 text-center text-xs font-bold text-indigo-200">
               No LeetCode profile linked.
             </div>
           )}
         </div>
       </div>
 
-      {/* Playful Solid Cards: PR Nemesis & Stack */}
+      {/* Playful Vibrant Solid Cards: PR Nemesis & Stack */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="p-5 rounded-2xl bg-[#2b121a] space-y-1">
-          <span className="text-[10px] text-rose-400 uppercase font-bold tracking-wider">
+        <div className="p-6 rounded-3xl bg-rose-600 text-white space-y-1">
+          <span className="text-[10px] text-rose-200 uppercase font-black tracking-wider">
             PR Nemesis
           </span>
-          <p className="text-xs sm:text-sm font-bold text-rose-100">{ai.devNemesis}</p>
+          <p className="text-xs sm:text-sm font-bold">{ai.devNemesis}</p>
         </div>
 
-        <div className="p-5 rounded-2xl bg-[#0d2736] space-y-1">
-          <span className="text-[10px] text-cyan-400 uppercase font-bold tracking-wider">
+        <div className="p-6 rounded-3xl bg-cyan-500 text-black space-y-1">
+          <span className="text-[10px] text-black/70 uppercase font-black tracking-wider">
             Ideal Tech Stack
           </span>
-          <p className="text-xs sm:text-sm font-bold text-cyan-100">{ai.recommendedStack}</p>
+          <p className="text-xs sm:text-sm font-bold">{ai.recommendedStack}</p>
         </div>
       </div>
 
-      {/* Observation List with SOLID Badges */}
-      <div className="space-y-3">
-        <span className="text-[11px] text-gray-400 uppercase font-bold tracking-widest block">
+      {/* Key Observation Cards - SOLID VIBRANT PURPLE CONTAINER */}
+      <div className="p-6 rounded-3xl bg-purple-600 text-white space-y-3">
+        <span className="text-[11px] text-purple-200 uppercase font-black tracking-widest block">
           Key Observations
         </span>
-        <div className="space-y-2.5">
+        <div className="space-y-3">
           {ai.observations.map((obs, idx) => (
             <div
               key={idx}
-              className="p-4.5 rounded-2xl bg-[#141414] text-xs sm:text-sm text-gray-100 flex items-start gap-3.5 leading-relaxed"
+              className={`p-5 rounded-2xl text-xs sm:text-sm flex items-start gap-4 leading-relaxed ${
+                VIBRANT_OBS_CARDS[idx % VIBRANT_OBS_CARDS.length]
+              }`}
             >
-              <span
-                className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs shrink-0 ${
-                  SOLID_OBS_BADGES[idx % SOLID_OBS_BADGES.length]
-                }`}
-              >
+              <span className="w-7 h-7 rounded-xl bg-black text-white font-black flex items-center justify-center text-xs shrink-0">
                 0{idx + 1}
               </span>
-              <span>{obs}</span>
+              <span className="pt-0.5 font-bold">{obs}</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* Clean Brand Watermark */}
-      <div className="pt-4 flex items-center justify-between text-[11px] text-gray-600">
+      <div className="pt-4 flex items-center justify-between text-[11px] text-gray-500">
         <div className="flex items-center gap-2">
           <CodeAuraLogo className="w-4 h-4" />
           <span className="font-bold text-white">CodeAura</span>
