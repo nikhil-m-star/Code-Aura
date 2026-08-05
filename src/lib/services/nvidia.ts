@@ -28,50 +28,25 @@ export async function generateAISummary(
 
   if (apiKey) {
     try {
-      const prompt = `Perform an articulate, deeply analytical, and witty developer profile evaluation using these exact statistics:
+      const prompt = `Analyze this dev profile & generate a witty aura analysis JSON:
+GitHub: ${github.username} | TopLang: ${github.topLanguage} (${github.languages.map((l) => `${l.name}:${l.percentage}%`).join(', ')}) | Repos: ${github.publicRepos} | Stars: ${github.totalStars} | WorkWindow: ${github.timeSlot} | NightOwl: ${github.nightOwlScore}% | Complexity: ${github.codeComplexityScore}/99
+LeetCode: ${leetcode ? `Solved:${leetcode.totalSolved} (E:${leetcode.easySolved}, M:${leetcode.mediumSolved}, H:${leetcode.hardSolved}) | Acc:${leetcode.acceptanceRate}% | Mastery:${leetcode.algoMasteryScore}/99` : 'None'}
 
-GitHub Stats:
-- Username: ${github.username}
-- Top Language: ${github.topLanguage} (${github.languages.map((l) => `${l.name}: ${l.percentage}%`).join(', ')})
-- Public Repos: ${github.publicRepos} | Total Stars: ${github.totalStars} | Total Forks: ${github.totalForks} | Followers: ${github.followers}
-- Primary Work Window: ${github.timeSlot} (Night-owl ratio: ${github.nightOwlScore}%)
-- Activity: ${github.recentCommitCount} recent commits, ${github.pullRequestCount} PRs, ${github.issueCount} issue events
-- Code Complexity Rating: ${github.codeComplexityScore}/99 | Original Repos: ${github.originalityRatio}%
-- Top Repos: ${github.topRepos.map((r) => `${r.name} (${r.stars}★)`).join(', ')}
-
-LeetCode Stats: ${
-        leetcode
-          ? `
-- Solved: ${leetcode.totalSolved} total (${leetcode.easySolved} Easy, ${leetcode.mediumSolved} Med, ${leetcode.hardSolved} Hard)
-- Acceptance: ${leetcode.acceptanceRate}% | Hard-to-Easy Ratio: ${leetcode.hardToEasyRatio}% | Algo Mastery: ${leetcode.algoMasteryScore}/99
-- Top Languages: ${leetcode.topLanguages.join(', ')}
-`
-          : 'No LeetCode handle attached.'
-      }
-
-Output MUST be a single raw JSON object matching this exact interface:
+Return ONLY raw JSON matching:
 {
-  "archetype": "Creative 2-4 word dev archetype (e.g., 'Async Midnight Architect')",
-  "tagline": "Witty 1-sentence summary of their dev personality",
-  "auraColor": "Choose ONE: 'cyberpunk' | 'solar-flare' | 'emerald-matrix' | 'deep-space' | 'laser-violet'",
-  "auraScore": 85,
+  "archetype": "2-4 word dev title",
+  "tagline": "1 sentence witty summary",
+  "auraColor": "cyberpunk",
+  "auraScore": 88,
   "keyVibe": "2-3 word badge",
-  "observations": [
-    "5 specific analytical observations citing exact metrics (stars, top language %, night owl %, PR count, hard problems, etc)"
-  ],
-  "roastOrPraise": "1-2 sentence roast or praise about their stack and LeetCode habits",
-  "devNemesis": "Funny dev persona they would clash with in PR reviews",
-  "recommendedStack": "A hilarious ideal tech stack tailored to them",
-  "radarStats": {
-    "velocity": 80,
-    "clarity": 85,
-    "algorithms": 75,
-    "stamina": 90,
-    "impact": 70
-  }
+  "observations": ["Obs 1 with stat", "Obs 2 with stat", "Obs 3 with stat", "Obs 4 with stat"],
+  "roastOrPraise": "1-2 sentence roast or praise",
+  "devNemesis": "Funny PR reviewer rival",
+  "recommendedStack": "Ideal tech stack",
+  "radarStats": { "velocity": 85, "clarity": 80, "algorithms": 75, "stamina": 90, "impact": 70 }
 }`
 
-      // Using Llama-3.3-70b-instruct for deep, highly analytical intelligence
+      // Using Llama-3.1-8b-instruct for sub-second, blazing fast AI completions
       const response = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -80,20 +55,19 @@ Output MUST be a single raw JSON object matching this exact interface:
           Accept: 'application/json',
         },
         body: JSON.stringify({
-          model: 'meta/llama-3.3-70b-instruct',
+          model: 'meta/llama-3.1-8b-instruct',
           messages: [
             {
               role: 'system',
-              content:
-                'You are an expert AI software engineering analyst outputting pure JSON without markdown.',
+              content: 'Output pure raw JSON without markdown.',
             },
             {
               role: 'user',
               content: prompt,
             },
           ],
-          temperature: 0.7,
-          max_tokens: 750,
+          temperature: 0.6,
+          max_tokens: 450,
         }),
       })
 
