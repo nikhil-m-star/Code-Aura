@@ -34,7 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <header className="w-full bg-black px-6 py-6">
             <div className="max-w-5xl mx-auto flex items-center justify-between">
               <Link href="/" className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-purple-500 inline-block"></span>
+                <span className="w-3 h-3 rounded-full bg-fuchsia-500 inline-block"></span>
                 <span className="font-extrabold text-xl tracking-tight text-white">
                   CodeAura
                 </span>
@@ -90,7 +90,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {/* Main Content */}
           <main className="flex-1 flex flex-col">{children}</main>
 
-          {/* Minimal Clean Footer - No Vendor Mention */}
+          {/* Minimal Clean Footer */}
           <footer className="py-8 px-6 text-center text-xs text-gray-500 bg-black">
             <div className="max-w-5xl mx-auto flex items-center justify-between">
               <span className="font-semibold text-gray-400">CodeAura</span>

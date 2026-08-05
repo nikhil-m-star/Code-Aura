@@ -13,7 +13,7 @@ interface AuraCardProps {
 }
 
 const OBS_COLORS = [
-  'bg-purple-500/20 text-purple-300',
+  'bg-fuchsia-500/20 text-fuchsia-300',
   'bg-emerald-500/20 text-emerald-300',
   'bg-cyan-500/20 text-cyan-300',
   'bg-amber-500/20 text-amber-300',
@@ -31,14 +31,14 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
 
   // Playful Tier Grade based on Aura Score
   let tierGrade = 'A-TIER'
-  let tierBadgeBg = 'bg-purple-500 text-black'
+  let tierBadgeBg = 'bg-fuchsia-500 text-black'
 
   if (ai.auraScore >= 92) {
     tierGrade = 'S-TIER GOD'
     tierBadgeBg = 'bg-yellow-400 text-black'
   } else if (ai.auraScore >= 84) {
     tierGrade = 'S-TIER DEV'
-    tierBadgeBg = 'bg-purple-400 text-black'
+    tierBadgeBg = 'bg-fuchsia-400 text-black'
   } else if (ai.auraScore >= 75) {
     tierGrade = 'A-TIER PRO'
     tierBadgeBg = 'bg-cyan-400 text-black'
@@ -65,10 +65,10 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
               <h2 className="text-2xl font-black text-white tracking-tight">
                 {github.name || github.username}
               </h2>
-              <span className="text-xs font-mono text-purple-400 font-bold">@{github.username}</span>
+              <span className="text-xs font-mono text-fuchsia-400 font-bold">@{github.username}</span>
             </div>
             <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-500/20 text-purple-300">
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-fuchsia-500/20 text-fuchsia-300">
                 {github.topLanguage}
               </span>
               <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-cyan-500/20 text-cyan-300">
@@ -99,7 +99,7 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
 
       {/* Archetype & Tagline */}
       <div className="p-6 rounded-2xl bg-[#141414] space-y-2">
-        <span className="text-[11px] font-mono text-purple-400 uppercase tracking-widest font-bold block">
+        <span className="text-[11px] font-mono text-fuchsia-400 uppercase tracking-widest font-bold block">
           AI Archetype
         </span>
         <h3 className="text-2xl sm:text-3xl font-black text-white">
@@ -112,18 +112,18 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
       <div className="p-6 rounded-2xl bg-[#141414] space-y-4">
         <div className="flex items-center justify-between text-xs font-mono font-bold uppercase tracking-widest text-gray-400">
           <span>Performance Ratings</span>
-          <span className="text-purple-400 font-bold">Complexity: {github.codeComplexityScore}/99</span>
+          <span className="text-fuchsia-400 font-bold">Complexity: {github.codeComplexityScore}/99</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
           {/* Velocity */}
-          <div className="p-3 rounded-xl bg-[#1a1424] space-y-1.5">
+          <div className="p-3 rounded-xl bg-[#241420] space-y-1.5">
             <div className="flex justify-between text-xs">
-              <span className="text-purple-300 font-bold">Velocity</span>
+              <span className="text-fuchsia-300 font-bold">Velocity</span>
               <span className="font-mono text-white font-bold">{radar.velocity}%</span>
             </div>
-            <div className="w-full h-2 bg-[#2a1d3b] rounded-full overflow-hidden">
-              <div className="h-full bg-purple-400 rounded-full" style={{ width: `${radar.velocity}%` }} />
+            <div className="w-full h-2 bg-[#3b1d35] rounded-full overflow-hidden">
+              <div className="h-full bg-fuchsia-400 rounded-full" style={{ width: `${radar.velocity}%` }} />
             </div>
           </div>
 
@@ -199,7 +199,7 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
 
           <div className="flex justify-between text-xs font-mono text-gray-400 pt-1">
             <span>Primary Language</span>
-            <span className="text-purple-300 font-bold">{github.topLanguage}</span>
+            <span className="text-fuchsia-300 font-bold">{github.topLanguage}</span>
           </div>
         </div>
 
@@ -281,18 +281,18 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
       </div>
 
       {/* Roast & Praise */}
-      <div className="p-6 rounded-2xl bg-[#1c1424] space-y-2">
-        <span className="text-[11px] font-mono text-pink-400 font-bold uppercase tracking-widest block">
+      <div className="p-6 rounded-2xl bg-[#241420] space-y-2">
+        <span className="text-[11px] font-mono text-fuchsia-400 font-bold uppercase tracking-widest block">
           The Roast & Praise
         </span>
-        <p className="text-sm sm:text-base text-purple-100 font-medium italic leading-relaxed">
+        <p className="text-sm sm:text-base text-fuchsia-100 font-medium italic leading-relaxed">
           "{ai.roastOrPraise}"
         </p>
       </div>
 
       {/* Clean Brand Watermark */}
       <div className="pt-4 flex items-center justify-between text-[11px] font-mono text-gray-600">
-        <span className="font-bold text-purple-400">CodeAura</span>
+        <span className="font-bold text-fuchsia-400">CodeAura</span>
         <span>code-aura-app.vercel.app</span>
       </div>
     </div>

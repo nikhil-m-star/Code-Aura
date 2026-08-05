@@ -95,7 +95,7 @@ export default function HomePage() {
         <div className="max-w-2xl w-full text-center space-y-10 py-12">
           {/* Dynamic Processing Text */}
           <div className="space-y-3">
-            <div className="w-10 h-10 rounded-full bg-purple-500/20 text-purple-400 mx-auto flex items-center justify-center animate-spin">
+            <div className="w-10 h-10 rounded-full bg-fuchsia-500/20 text-fuchsia-400 mx-auto flex items-center justify-center animate-spin">
               <Loader2 className="w-6 h-6" />
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-white font-mono tracking-tight transition-all duration-300">
@@ -130,14 +130,14 @@ export default function HomePage() {
           {/* Main Title */}
           <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-none">
             What Is Your <br />
-            <span className="text-purple-400">Developer Aura?</span>
+            <span className="text-fuchsia-400">Developer Aura?</span>
           </h1>
 
           {/* Input Form */}
           <form onSubmit={handleSubmit} className="mt-8 space-y-4 text-left">
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider">
-                GitHub Username <span className="text-purple-400">*</span>
+                GitHub Username <span className="text-fuchsia-400">*</span>
               </label>
               <input
                 type="text"
@@ -173,7 +173,7 @@ export default function HomePage() {
               <SignInButton mode="modal">
                 <button
                   type="button"
-                  className="w-full py-4 px-6 rounded-2xl font-bold text-black bg-purple-400 hover:bg-purple-300 transition-all text-sm cursor-pointer shadow-lg"
+                  className="w-full py-4 px-6 rounded-2xl font-bold text-black bg-fuchsia-400 hover:bg-fuchsia-300 transition-all text-sm cursor-pointer shadow-lg"
                 >
                   Sign In to Analyze Aura
                 </button>
@@ -181,7 +181,7 @@ export default function HomePage() {
             ) : (
               <button
                 type="submit"
-                className="w-full py-4 px-6 rounded-2xl font-bold text-black bg-purple-400 hover:bg-purple-300 transition-all text-sm flex items-center justify-center gap-2 cursor-pointer shadow-lg"
+                className="w-full py-4 px-6 rounded-2xl font-bold text-black bg-fuchsia-400 hover:bg-fuchsia-300 transition-all text-sm flex items-center justify-center gap-2 cursor-pointer shadow-lg"
               >
                 <span>Generate Developer Aura</span>
                 <ArrowRight className="w-4 h-4" />
