@@ -1,27 +1,16 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth, SignInButton } from '@clerk/nextjs'
-import { ArrowRight, Loader2 } from 'lucide-react'
-import { GithubIcon } from '@/components/GithubIcon'
-import {
-  LeetCodeLogo,
-  ReactLogo,
-  TypeScriptLogo,
-  PythonLogo,
-  PostgreSQLLogo,
-  TailwindLogo,
-  NextjsLogo,
-  PrismaLogo,
-} from '@/components/BrandLogos'
+import { ArrowRight } from 'lucide-react'
 import { analyzeDeveloperAction } from '@/app/actions/analysis'
 
 const DYNAMIC_PROCESSING_TEXTS = [
   'Processing GitHub Repositories...',
-  'Analyzing Commit Velocity & Peak Coding Hours...',
-  'Querying LeetCode Difficulty Stats & Acceptance Rate...',
-  'Calculating Algorithmic Mastery & Radar Ratings...',
+  'Analyzing Commit Velocity & Peak Hours...',
+  'Querying LeetCode Difficulty Stats...',
+  'Calculating Algorithmic Mastery Ratings...',
   'Formulating Developer Archetype & Roast...',
 ]
 
@@ -63,6 +52,67 @@ const REAL_BRAND_IMAGE_LOGOS = [
     src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prisma/prisma-original.svg',
   },
 ]
+
+function DynamicScalingTicker({ logos }: { logos: typeof REAL_BRAND_IMAGE_LOGOS }) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const itemsRef = useRef<(HTMLDivElement | null)[]>([])
+
+  useEffect(() => {
+    let animFrame: number
+
+    const updateScales = () => {
+      if (containerRef.current) {
+        const containerRect = containerRef.current.getBoundingClientRect()
+        const centerX = containerRect.left + containerRect.width / 2
+        const maxDist = containerRect.width / 2
+
+        itemsRef.current.forEach((item) => {
+          if (item) {
+            const itemRect = item.getBoundingClientRect()
+            const itemCenter = itemRect.left + itemRect.width / 2
+            const dist = Math.abs(centerX - itemCenter)
+            const normDist = Math.min(1, dist / maxDist)
+
+            // Dynamic fisheye scaling: 0.70 at edges -> 1.35 in middle
+            const scale = 1.35 - normDist * 0.65
+            const opacity = 1 - normDist * 0.45
+
+            item.style.transform = `scale(${scale})`
+            item.style.opacity = `${opacity}`
+          }
+        })
+      }
+      animFrame = requestAnimationFrame(updateScales)
+    }
+
+    animFrame = requestAnimationFrame(updateScales)
+    return () => cancelAnimationFrame(animFrame)
+  }, [])
+
+  const repeatedLogos = [...logos, ...logos, ...logos, ...logos]
+
+  return (
+    <div
+      ref={containerRef}
+      className="w-full overflow-hidden mask-fade-edges py-12 bg-[#0c0c0c] rounded-3xl"
+    >
+      <div className="animate-marquee flex items-center gap-10">
+        {repeatedLogos.map((item, idx) => (
+          <div
+            key={idx}
+            ref={(el) => {
+              itemsRef.current[idx] = el
+            }}
+            className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-[#161616] shrink-0 transition-transform duration-75 ease-out"
+          >
+            <img src={item.src} alt={item.name} className="w-10 h-10 object-contain" />
+            <span className="text-sm font-bold text-gray-100 font-sans">{item.name}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export default function HomePage() {
   const router = useRouter()
@@ -117,44 +167,22 @@ export default function HomePage() {
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-4 py-16 bg-black min-h-[75vh] font-sans">
-      {/* LOADING STATE - SHOW ONLY DYNAMIC PROCESSING TEXT + REAL LOGOS SLIDING RIGHT TO LEFT */}
+      {/* LOADING STATE */}
       {isAnalyzing ? (
-        <div className="max-w-2xl w-full text-center space-y-10 py-12">
-          {/* Dynamic Processing Text */}
-          <div className="space-y-3">
-            <div className="w-10 h-10 rounded-full bg-fuchsia-500/20 text-fuchsia-400 mx-auto flex items-center justify-center animate-spin">
-              <Loader2 className="w-6 h-6" />
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight transition-all duration-500">
-              {DYNAMIC_PROCESSING_TEXTS[processingTextIdx]}
-            </h2>
-            <p className="text-xs text-gray-500">Building your developer aura card...</p>
-          </div>
+        <div className="max-w-2xl w-full text-center space-y-8 py-12">
+          {/* Dynamic Processing Text - Smaller size, exact website font, NO circle loader */}
+          <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight font-sans transition-all duration-500">
+            {DYNAMIC_PROCESSING_TEXTS[processingTextIdx]}
+          </h2>
 
-          {/* Sliding Tech Ticker Marquee with REAL Official Logo Images */}
-          <div className="w-full overflow-hidden mask-fade-edges py-6 bg-[#0c0c0c] rounded-3xl">
-            <div className="animate-marquee flex items-center gap-8">
-              {[...REAL_BRAND_IMAGE_LOGOS, ...REAL_BRAND_IMAGE_LOGOS, ...REAL_BRAND_IMAGE_LOGOS].map(
-                (item, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-[#161616] shrink-0"
-                  >
-                    <img src={item.src} alt={item.name} className="w-5 h-5 object-contain" />
-                    <span className="text-xs font-bold text-gray-200">
-                      {item.name}
-                    </span>
-                  </div>
-                )
-              )}
-            </div>
-          </div>
+          {/* Dynamic Fisheye Scaling Marquee with REAL Larger Logo Images */}
+          <DynamicScalingTicker logos={REAL_BRAND_IMAGE_LOGOS} />
         </div>
       ) : (
         /* STANDARD HOME FORM STATE */
         <div className="max-w-xl w-full text-center space-y-6">
           {/* Main Title */}
-          <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-none">
+          <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-none font-sans">
             What Is Your <br />
             <span className="text-fuchsia-400">Developer Aura?</span>
           </h1>
@@ -162,7 +190,7 @@ export default function HomePage() {
           {/* Input Form */}
           <form onSubmit={handleSubmit} className="mt-8 space-y-4 text-left">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider">
+              <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider font-sans">
                 GitHub Username <span className="text-fuchsia-400">*</span>
               </label>
               <input
@@ -176,7 +204,7 @@ export default function HomePage() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider flex justify-between">
+              <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider flex justify-between font-sans">
                 <span>LeetCode Handle</span>
                 <span className="text-gray-500 font-normal lowercase">(optional)</span>
               </label>
@@ -190,7 +218,7 @@ export default function HomePage() {
             </div>
 
             {errorMessage && (
-              <div className="p-3.5 rounded-2xl bg-rose-950/50 text-rose-300 text-xs font-medium">
+              <div className="p-3.5 rounded-2xl bg-rose-950/50 text-rose-300 text-xs font-medium font-sans">
                 {errorMessage}
               </div>
             )}
@@ -199,7 +227,7 @@ export default function HomePage() {
               <SignInButton mode="modal">
                 <button
                   type="button"
-                  className="w-full py-4 px-6 rounded-2xl font-bold text-black bg-fuchsia-400 hover:bg-fuchsia-300 transition-all text-sm cursor-pointer shadow-lg"
+                  className="w-full py-4 px-6 rounded-2xl font-bold text-black bg-fuchsia-400 hover:bg-fuchsia-300 transition-all text-sm cursor-pointer shadow-lg font-sans"
                 >
                   Sign In to Analyze Aura
                 </button>
@@ -207,7 +235,7 @@ export default function HomePage() {
             ) : (
               <button
                 type="submit"
-                className="w-full py-4 px-6 rounded-2xl font-bold text-black bg-fuchsia-400 hover:bg-fuchsia-300 transition-all text-sm flex items-center justify-center gap-2 cursor-pointer shadow-lg"
+                className="w-full py-4 px-6 rounded-2xl font-bold text-black bg-fuchsia-400 hover:bg-fuchsia-300 transition-all text-sm flex items-center justify-center gap-2 cursor-pointer shadow-lg font-sans"
               >
                 <span>Generate Developer Aura</span>
                 <ArrowRight className="w-4 h-4" />
