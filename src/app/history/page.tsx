@@ -1,10 +1,8 @@
-'use me'
 'use client'
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Sparkles, History, ArrowRight, Code2, Calendar } from 'lucide-react'
-import { GithubIcon } from '@/components/GithubIcon'
+import { ArrowRight } from 'lucide-react'
 import { getUserAnalysesAction } from '@/app/actions/analysis'
 import { AISummary } from '@/lib/services/nvidia'
 
@@ -31,64 +29,55 @@ export default function HistoryPage() {
   }, [])
 
   return (
-    <div className="flex-1 max-w-5xl w-full mx-auto px-4 py-8 md:py-12 space-y-8">
-      <div className="flex items-center justify-between border-b border-white/10 pb-6">
+    <div className="flex-1 max-w-4xl w-full mx-auto px-4 py-10 space-y-8 bg-black">
+      <div className="flex items-center justify-between pb-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-purple-400 uppercase tracking-widest mb-1">
-            <History className="w-4 h-4 text-pink-400" />
-            Your Saved Analyses
-          </div>
-          <h1 className="text-3xl font-black text-white">Developer Aura Vault</h1>
+          <span className="text-xs font-mono text-gray-500 uppercase tracking-widest block mb-1">
+            Vault
+          </span>
+          <h1 className="text-3xl font-extrabold text-white">Your Saved Auras</h1>
         </div>
 
         <Link
           href="/"
-          className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 transition-all shadow-md shadow-purple-600/20"
+          className="px-4 py-2 rounded-xl text-xs font-semibold text-black bg-white hover:bg-gray-200 transition-all"
         >
-          <Sparkles className="w-4 h-4 text-yellow-300" />
-          <span>New Analysis</span>
+          New Analysis
         </Link>
       </div>
 
       {loading ? (
-        <div className="py-20 text-center text-gray-400 font-mono text-sm">
-          Loading your aura history...
+        <div className="py-16 text-center text-gray-500 font-mono text-sm">
+          Loading history...
         </div>
       ) : history.length === 0 ? (
-        <div className="py-16 text-center border border-dashed border-white/10 rounded-2xl bg-white/[0.01] p-8 space-y-4">
-          <Sparkles className="w-10 h-10 text-purple-400 mx-auto" />
-          <h3 className="text-xl font-bold text-white">No Saved Auras Yet</h3>
-          <p className="text-sm text-gray-400 max-w-sm mx-auto">
-            Analyze your GitHub or LeetCode profile on the home page to save your developer aura cards.
+        <div className="py-16 text-center rounded-2xl bg-[#0c0c0c] p-8 space-y-4">
+          <h3 className="text-lg font-bold text-white">No Saved Auras Yet</h3>
+          <p className="text-xs text-gray-400 max-w-xs mx-auto">
+            Analyze your profile on the home page to save your aura cards here.
           </p>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-white bg-purple-600 hover:bg-purple-500 text-sm transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-black bg-white"
           >
-            Create Your First Aura
+            Create Aura
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {history.map((item) => (
             <Link
               key={item.id}
               href={`/results/${item.id}`}
-              className="p-5 rounded-2xl glass-panel-interactive border border-white/10 flex flex-col justify-between space-y-4 group"
+              className="p-5 rounded-2xl bg-[#0c0c0c] hover:bg-[#141414] transition-all flex flex-col justify-between space-y-4 group"
             >
               <div>
-                <div className="flex items-center justify-between text-xs text-gray-400 font-mono mb-2">
-                  <span className="flex items-center gap-1.5 text-purple-300">
-                    <GithubIcon className="w-3.5 h-3.5" />
-                    @{item.githubUsername}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Calendar className="w-3.5 h-3.5" />
-                    {new Date(item.createdAt).toLocaleDateString()}
-                  </span>
+                <div className="flex items-center justify-between text-xs text-gray-500 font-mono mb-2">
+                  <span>@{item.githubUsername}</span>
+                  <span>{new Date(item.createdAt).toLocaleDateString()}</span>
                 </div>
 
-                <h3 className="text-lg font-extrabold text-white group-hover:text-purple-300 transition-colors">
+                <h3 className="text-lg font-extrabold text-white group-hover:text-gray-300 transition-colors">
                   "{item.aiSummary?.archetype || 'Developer Aura'}"
                 </h3>
 
@@ -97,13 +86,13 @@ export default function HistoryPage() {
                 </p>
               </div>
 
-              <div className="pt-3 border-t border-white/5 flex items-center justify-between text-xs">
-                <span className="font-semibold text-purple-400">
-                  Aura Rating: {item.aiSummary?.auraScore || 80}/99
+              <div className="pt-3 flex items-center justify-between text-xs">
+                <span className="font-semibold text-white font-mono">
+                  Score: {item.aiSummary?.auraScore || 80}/99
                 </span>
-                <span className="flex items-center gap-1 text-gray-300 group-hover:translate-x-1 transition-transform">
-                  <span>View Card</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-pink-400" />
+                <span className="flex items-center gap-1 text-gray-400 group-hover:text-white transition-colors">
+                  <span>View</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </div>
             </Link>

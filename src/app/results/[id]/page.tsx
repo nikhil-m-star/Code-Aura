@@ -1,12 +1,11 @@
-'use me'
 'use client'
 
 import React, { useEffect, useState, useRef } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import confetti from 'canvas-confetti'
 import { toPng } from 'html-to-image'
-import { Sparkles, Copy, Check, Download, ArrowLeft, RefreshCw, Share2, AlertCircle } from 'lucide-react'
+import { Download, ArrowLeft, Share2 } from 'lucide-react'
 import { getAnalysisByIdAction } from '@/app/actions/analysis'
 import { AuraCard } from '@/components/AuraCard'
 import { GitHubUserStats } from '@/lib/services/github'
@@ -25,7 +24,6 @@ interface AnalysisData {
 
 export default function AnalysisResultsPage() {
   const params = useParams()
-  const router = useRouter()
   const id = params?.id as string
 
   const [analysis, setAnalysis] = useState<AnalysisData | null>(null)
@@ -42,12 +40,11 @@ export default function AnalysisResultsPage() {
       const data = await getAnalysisByIdAction(id)
       if (data) {
         setAnalysis(data as any)
-        // Fire confetti on load for celebratory feel!
         confetti({
-          particleCount: 70,
-          spread: 80,
+          particleCount: 50,
+          spread: 60,
           origin: { y: 0.6 },
-          colors: ['#a855f7', '#ec4899', '#3b82f6', '#f59e0b'],
+          colors: ['#ffffff', '#888888', '#aaaaaa'],
         })
       }
       setLoading(false)
@@ -81,29 +78,18 @@ export default function AnalysisResultsPage() {
   if (loading) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center py-20 px-4">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center animate-spin">
-            <Sparkles className="w-6 h-6 text-purple-400" />
-          </div>
-          <p className="text-sm font-mono text-gray-400">Loading Developer Aura Analysis...</p>
-        </div>
+        <p className="text-sm font-mono text-gray-500 animate-pulse">Loading Aura...</p>
       </div>
     )
   }
 
   if (!analysis) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center py-20 px-4 text-center">
-        <div className="w-14 h-14 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center mb-4">
-          <AlertCircle className="w-7 h-7 text-rose-400" />
-        </div>
-        <h2 className="text-2xl font-bold text-white mb-2">Analysis Not Found</h2>
-        <p className="text-sm text-gray-400 max-w-md mb-6">
-          The developer aura record you are looking for may have been removed or does not exist.
-        </p>
+      <div className="flex-1 flex flex-col items-center justify-center py-20 px-4 text-center space-y-4">
+        <h2 className="text-xl font-bold text-white">Analysis Not Found</h2>
         <Link
           href="/"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-white bg-purple-600 hover:bg-purple-500 transition-all text-sm"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-black bg-white"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Home
@@ -113,31 +99,28 @@ export default function AnalysisResultsPage() {
   }
 
   return (
-    <div className="flex-1 flex flex-col items-center px-4 py-8 md:py-12 space-y-8">
-      {/* Action Bar Header */}
-      <div className="w-full max-w-4xl flex flex-col sm:flex-row items-center justify-between gap-4 bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-xl">
+    <div className="flex-1 flex flex-col items-center px-4 py-8 space-y-6 bg-black">
+      {/* Action Bar */}
+      <div className="w-full max-w-3xl flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#0c0c0c] p-3.5 px-5 rounded-2xl">
         <Link
           href="/"
-          className="flex items-center gap-2 text-xs font-semibold text-gray-300 hover:text-white px-3.5 py-2 rounded-xl hover:bg-white/5 transition-all"
+          className="flex items-center gap-2 text-xs font-semibold text-gray-400 hover:text-white transition-all"
         >
-          <ArrowLeft className="w-4 h-4 text-purple-400" />
+          <ArrowLeft className="w-4 h-4" />
           <span>Analyze Another</span>
         </Link>
 
-        <div className="flex items-center gap-2 flex-wrap justify-center">
+        <div className="flex items-center gap-2">
           <button
             onClick={handleCopyLink}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-gray-200 bg-white/10 hover:bg-white/20 border border-white/10 transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-gray-300 bg-[#181818] hover:bg-[#222222] transition-all cursor-pointer"
           >
             {copied ? (
-              <>
-                <Check className="w-4 h-4 text-emerald-400" />
-                <span className="text-emerald-300">Link Copied!</span>
-              </>
+              <span className="text-white">Link Copied</span>
             ) : (
               <>
-                <Share2 className="w-4 h-4 text-purple-400" />
-                <span>Share Aura Link</span>
+                <Share2 className="w-3.5 h-3.5" />
+                <span>Share Link</span>
               </>
             )}
           </button>
@@ -145,15 +128,15 @@ export default function AnalysisResultsPage() {
           <button
             onClick={handleDownloadCard}
             disabled={downloading}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 transition-all shadow-md shadow-purple-600/20 cursor-pointer disabled:opacity-60"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-black bg-white hover:bg-gray-200 transition-all cursor-pointer disabled:opacity-50"
           >
-            <Download className="w-4 h-4" />
-            <span>{downloading ? 'Capturing...' : 'Download Card PNG'}</span>
+            <Download className="w-3.5 h-3.5" />
+            <span>{downloading ? 'Downloading...' : 'Download Card'}</span>
           </button>
         </div>
       </div>
 
-      {/* Main Aura Card Display */}
+      {/* Aura Card */}
       <AuraCard
         cardRef={cardRef}
         github={analysis.githubStats}
