@@ -28,7 +28,7 @@ export async function generateAISummary(
 
   if (apiKey) {
     try {
-      const prompt = `You are a hilarious, observant senior tech lead doing a deep analysis of a developer. Produce a witty, highly specific developer aura analysis using these real stats:
+      const prompt = `Perform an articulate, deeply analytical, and witty developer profile evaluation using these exact statistics:
 
 GitHub Stats:
 - Username: ${github.username}
@@ -36,7 +36,7 @@ GitHub Stats:
 - Public Repos: ${github.publicRepos} | Total Stars: ${github.totalStars} | Total Forks: ${github.totalForks} | Followers: ${github.followers}
 - Primary Work Window: ${github.timeSlot} (Night-owl ratio: ${github.nightOwlScore}%)
 - Activity: ${github.recentCommitCount} recent commits, ${github.pullRequestCount} PRs, ${github.issueCount} issue events
-- Code Complexity Rating: ${github.codeComplexityScore}/99
+- Code Complexity Rating: ${github.codeComplexityScore}/99 | Original Repos: ${github.originalityRatio}%
 - Top Repos: ${github.topRepos.map((r) => `${r.name} (${r.stars}★)`).join(', ')}
 
 LeetCode Stats: ${
@@ -46,7 +46,7 @@ LeetCode Stats: ${
 - Acceptance: ${leetcode.acceptanceRate}% | Hard-to-Easy Ratio: ${leetcode.hardToEasyRatio}% | Algo Mastery: ${leetcode.algoMasteryScore}/99
 - Top Languages: ${leetcode.topLanguages.join(', ')}
 `
-          : 'No LeetCode profile linked (wisely avoiding DP trauma).'
+          : 'No LeetCode handle attached.'
       }
 
 Output MUST be a single raw JSON object matching this exact interface:
@@ -57,7 +57,7 @@ Output MUST be a single raw JSON object matching this exact interface:
   "auraScore": 85,
   "keyVibe": "2-3 word badge",
   "observations": [
-    "5 specific observations citing exact metrics (stars, top language %, night owl %, PR count, etc)"
+    "5 specific analytical observations citing exact metrics (stars, top language %, night owl %, PR count, hard problems, etc)"
   ],
   "roastOrPraise": "1-2 sentence roast or praise about their stack and LeetCode habits",
   "devNemesis": "Funny dev persona they would clash with in PR reviews",
@@ -71,7 +71,7 @@ Output MUST be a single raw JSON object matching this exact interface:
   }
 }`
 
-      // Using Llama-3.1-8b-instruct for ultra-fast response speed (sub-second token generation)
+      // Using Llama-3.3-70b-instruct for deep, highly analytical intelligence
       const response = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -80,20 +80,20 @@ Output MUST be a single raw JSON object matching this exact interface:
           Accept: 'application/json',
         },
         body: JSON.stringify({
-          model: 'meta/llama-3.1-8b-instruct',
+          model: 'meta/llama-3.3-70b-instruct',
           messages: [
             {
               role: 'system',
               content:
-                'You are an AI code analyst that outputs pure JSON without markdown format.',
+                'You are an expert AI software engineering analyst outputting pure JSON without markdown.',
             },
             {
               role: 'user',
               content: prompt,
             },
           ],
-          temperature: 0.65,
-          max_tokens: 650,
+          temperature: 0.7,
+          max_tokens: 750,
         }),
       })
 
@@ -114,10 +114,10 @@ Output MUST be a single raw JSON object matching this exact interface:
           }
         }
       } else {
-        console.warn(`NVIDIA NIM API HTTP ${response.status}`)
+        console.warn(`AI API HTTP ${response.status}`)
       }
     } catch (err) {
-      console.warn('NVIDIA NIM AI generation fallback invoked:', err)
+      console.warn('AI generation fallback invoked:', err)
     }
   }
 

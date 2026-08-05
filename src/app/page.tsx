@@ -3,13 +3,19 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth, SignInButton } from '@clerk/nextjs'
-import { ArrowRight, Loader2, Sparkles } from 'lucide-react'
+import { ArrowRight, Loader2, Code2, Cpu, Database, Flame, Terminal, FileCode, Layers, GitBranch } from 'lucide-react'
+import { GithubIcon } from '@/components/GithubIcon'
 import { analyzeDeveloperAction } from '@/app/actions/analysis'
 
-const LOADING_STEPS = [
-  'Decoding GitHub commits...',
-  'Probing algorithm progress...',
-  'Formulating developer aura...',
+const TECH_LOGOS = [
+  { name: 'GitHub', icon: GithubIcon, color: 'text-white' },
+  { name: 'LeetCode', icon: Code2, color: 'text-amber-400' },
+  { name: 'TypeScript', icon: FileCode, color: 'text-blue-400' },
+  { name: 'Next.js 16', icon: Cpu, color: 'text-white' },
+  { name: 'React', icon: Layers, color: 'text-cyan-400' },
+  { name: 'Python', icon: Terminal, color: 'text-yellow-400' },
+  { name: 'PostgreSQL', icon: Database, color: 'text-indigo-400' },
+  { name: 'Prisma', icon: GitBranch, color: 'text-purple-400' },
 ]
 
 export default function HomePage() {
@@ -19,7 +25,6 @@ export default function HomePage() {
   const [githubUsername, setGithubUsername] = useState('')
   const [leetcodeUsername, setLeetcodeUsername] = useState('')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
-  const [loadingStepIdx, setLoadingStepIdx] = useState(0)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,19 +37,12 @@ export default function HomePage() {
 
     setErrorMessage(null)
     setIsAnalyzing(true)
-    setLoadingStepIdx(0)
-
-    const interval = setInterval(() => {
-      setLoadingStepIdx((prev) => (prev < LOADING_STEPS.length - 1 ? prev + 1 : prev))
-    }, 1000)
 
     try {
       const res = await analyzeDeveloperAction({
         githubUsername: githubUsername.trim(),
         leetcodeUsername: leetcodeUsername.trim() || undefined,
       })
-
-      clearInterval(interval)
 
       if (res.success && res.analysisId) {
         router.push(`/results/${res.analysisId}`)
@@ -53,7 +51,6 @@ export default function HomePage() {
         setErrorMessage(res.error || 'Analysis failed.')
       }
     } catch (err: any) {
-      clearInterval(interval)
       setIsAnalyzing(false)
       setErrorMessage(err.message || 'Network error.')
     }
@@ -62,21 +59,11 @@ export default function HomePage() {
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-4 py-16 bg-black">
       <div className="max-w-xl w-full text-center space-y-6">
-        {/* Playful Pill Badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#181818] text-purple-400 text-xs font-mono font-semibold">
-          <Sparkles className="w-3.5 h-3.5 text-yellow-400" />
-          <span>Developer Personality Engine</span>
-        </div>
-
         {/* Title */}
         <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-none">
           What Is Your <br />
           <span className="text-purple-400">Developer Aura?</span>
         </h1>
-
-        <p className="text-gray-400 text-sm sm:text-base max-w-md mx-auto leading-relaxed">
-          Uncover your witty developer archetype, fun stat observations, and lighthearted algorithm roasts.
-        </p>
 
         {/* Input Form */}
         <form onSubmit={handleSubmit} className="mt-8 space-y-4 text-left">
@@ -145,10 +132,33 @@ export default function HomePage() {
             </button>
           )}
 
+          {/* Artistic Tech Ticker Marquee while Loading */}
           {isAnalyzing && (
-            <p className="text-center text-xs font-mono text-purple-300 pt-2 animate-pulse">
-              {LOADING_STEPS[loadingStepIdx]}
-            </p>
+            <div className="pt-6 space-y-3">
+              <p className="text-center text-xs font-mono text-purple-300 animate-pulse">
+                Analyzing GitHub repositories & LeetCode data...
+              </p>
+
+              {/* Right-to-Left Infinite Ticker with Faded Edges */}
+              <div className="w-full overflow-hidden mask-fade-edges py-3 bg-[#0d0d0d] rounded-2xl">
+                <div className="animate-marquee flex items-center gap-6">
+                  {[...TECH_LOGOS, ...TECH_LOGOS, ...TECH_LOGOS].map((item, idx) => {
+                    const IconComponent = item.icon
+                    return (
+                      <div
+                        key={idx}
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#161616] shrink-0"
+                      >
+                        <IconComponent className={`w-4 h-4 ${item.color}`} />
+                        <span className="text-xs font-mono font-semibold text-gray-200">
+                          {item.name}
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
           )}
         </form>
       </div>

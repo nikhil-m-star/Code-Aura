@@ -57,6 +57,28 @@ body {
   background-color: #181818;
 }
 
+/* Smooth Right-to-Left Marquee Animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 14s linear infinite;
+}
+
+/* Fade Edges Mask */
+.mask-fade-edges {
+  mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+}
+
 /* Custom Minimal Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
