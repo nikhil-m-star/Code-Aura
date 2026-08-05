@@ -4,6 +4,7 @@ import React from 'react'
 import { GitHubUserStats } from '@/lib/services/github'
 import { LeetCodeUserStats } from '@/lib/services/leetcode'
 import { AISummary } from '@/lib/services/nvidia'
+import { CodeAuraLogo } from '@/components/CodeAuraLogo'
 
 interface AuraCardProps {
   github: GitHubUserStats
@@ -314,7 +315,10 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
 
       {/* Clean Brand Watermark */}
       <div className="pt-4 flex items-center justify-between text-[11px] text-gray-600">
-        <span className="font-bold text-fuchsia-400">CodeAura</span>
+        <div className="flex items-center gap-2">
+          <CodeAuraLogo className="w-4 h-4" />
+          <span className="font-bold text-white">CodeAura</span>
+        </div>
         <span>code-aura-app.vercel.app</span>
       </div>
     </div>
