@@ -73,9 +73,9 @@ function DynamicScalingTicker({ logos }: { logos: typeof REAL_BRAND_IMAGE_LOGOS 
             const dist = Math.abs(centerX - itemCenter)
             const normDist = Math.min(1, dist / maxDist)
 
-            // Dynamic fisheye scaling: 0.70 at edges -> 1.35 in middle
-            const scale = 1.35 - normDist * 0.65
-            const opacity = 1 - normDist * 0.45
+            // Fisheye scale: 0.65 at outer edges -> 1.40 in the center
+            const scale = 1.4 - normDist * 0.75
+            const opacity = 1 - normDist * 0.5
 
             item.style.transform = `scale(${scale})`
             item.style.opacity = `${opacity}`
@@ -94,19 +94,22 @@ function DynamicScalingTicker({ logos }: { logos: typeof REAL_BRAND_IMAGE_LOGOS 
   return (
     <div
       ref={containerRef}
-      className="w-full overflow-hidden mask-fade-edges py-12 bg-[#0c0c0c] rounded-3xl"
+      className="w-full max-w-5xl mx-auto overflow-hidden mask-fade-edges py-16 bg-[#0a0a0a] rounded-3xl"
     >
-      <div className="animate-marquee flex items-center gap-10">
+      <div className="animate-marquee flex items-center gap-12 sm:gap-16">
         {repeatedLogos.map((item, idx) => (
           <div
             key={idx}
             ref={(el) => {
               itemsRef.current[idx] = el
             }}
-            className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-[#161616] shrink-0 transition-transform duration-75 ease-out"
+            className="p-4 sm:p-5 rounded-3xl bg-[#141414] shrink-0 transition-transform duration-75 ease-out flex items-center justify-center"
           >
-            <img src={item.src} alt={item.name} className="w-10 h-10 object-contain" />
-            <span className="text-sm font-bold text-gray-100 font-sans">{item.name}</span>
+            <img
+              src={item.src}
+              alt={item.name}
+              className="w-12 h-12 sm:w-16 sm:h-16 object-contain"
+            />
           </div>
         ))}
       </div>
@@ -169,13 +172,13 @@ export default function HomePage() {
     <div className="flex-1 flex flex-col items-center justify-center px-4 py-16 bg-black min-h-[75vh] font-sans">
       {/* LOADING STATE */}
       {isAnalyzing ? (
-        <div className="max-w-2xl w-full text-center space-y-8 py-12">
-          {/* Dynamic Processing Text - Smaller size, exact website font, NO circle loader */}
+        <div className="w-full max-w-5xl text-center space-y-10 py-12">
+          {/* Dynamic Processing Text */}
           <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight font-sans transition-all duration-500">
             {DYNAMIC_PROCESSING_TEXTS[processingTextIdx]}
           </h2>
 
-          {/* Dynamic Fisheye Scaling Marquee with REAL Larger Logo Images */}
+          {/* Dynamic Wide Fisheye Scaling Ticker - NO TEXT, BIGGER LOGOS, WIDER AREA */}
           <DynamicScalingTicker logos={REAL_BRAND_IMAGE_LOGOS} />
         </div>
       ) : (
