@@ -30,24 +30,49 @@ export async function generateAISummary(
 
   if (apiKey) {
     try {
-      const prompt = `Analyze this dev profile & generate a hilarious roast and epic praise JSON:
-GitHub: ${github.username} | TopLang: ${github.topLanguage} (${github.languages.map((l) => `${l.name}:${l.percentage}%`).join(', ')}) | Repos: ${github.publicRepos} | Stars: ${github.totalStars} | WorkWindow: ${github.timeSlot} | NightOwl: ${github.nightOwlScore}% | Complexity: ${github.codeComplexityScore}/100
-LeetCode: ${leetcode ? `Solved:${leetcode.totalSolved} (E:${leetcode.easySolved}, M:${leetcode.mediumSolved}, H:${leetcode.hardSolved}) | Acc:${leetcode.acceptanceRate}% | Mastery:${leetcode.algoMasteryScore}/100` : 'None'}
+      const prompt = `Conduct a deeply analytical, articulate, and hilarious developer personality evaluation:
 
-Return ONLY raw JSON matching:
+GitHub Data:
+- Handle: @${github.username} (${github.name || 'Anonymous'})
+- Languages: Primary ${github.topLanguage} (${github.languages.map((l) => `${l.name}: ${l.percentage}%`).join(', ')})
+- Repositories: ${github.publicRepos} total (${github.originalityRatio}% original, ${github.forkedReposCount} forks)
+- Community Impact: ${github.totalStars} stars, ${github.totalForks} forks, ${github.followers} followers
+- Work Window: ${github.timeSlot} (${github.nightOwlScore}% late-night commit ratio)
+- Code Complexity Score: ${github.codeComplexityScore}/100
+- Recent Commit Activity: ${github.recentCommitCount} commits, ${github.pullRequestCount} PRs across ${github.topRepos.slice(0, 3).map((r) => r.name).join(', ')}
+
+LeetCode Data: ${
+        leetcode
+          ? `Solved ${leetcode.totalSolved} total (${leetcode.easySolved} Easy, ${leetcode.mediumSolved} Med, ${leetcode.hardSolved} Hard) | Acceptance: ${leetcode.acceptanceRate}% | Hard Ratio: ${leetcode.hardToEasyRatio}% | Algo Rating: ${leetcode.algoMasteryScore}/100`
+          : 'No LeetCode linked.'
+      }
+
+Return ONLY a raw JSON object with zero markdown syntax matching:
 {
-  "archetype": "2-4 word dev title",
-  "tagline": "1 sentence witty summary",
+  "archetype": "Witty 2-4 word developer archetype title",
+  "tagline": "Sharp 1-sentence synopsis of their dev methodology",
   "auraColor": "cyberpunk",
   "auraScore": 88,
   "keyVibe": "2-3 word badge",
-  "observations": ["Obs 1 with stat", "Obs 2 with stat", "Obs 3 with stat", "Obs 4 with stat"],
-  "roast": "1-2 sentence sharp, hilarious roast targeting their commits, stack, and habits",
-  "praise": "1-2 sentence epic praise celebrating their genuine developer superpower",
-  "roastOrPraise": "1 sentence summary verdict",
-  "devNemesis": "Funny PR reviewer rival",
-  "recommendedStack": "Ideal tech stack",
-  "radarStats": { "velocity": 85, "clarity": 80, "algorithms": 75, "stamina": 90, "impact": 70 }
+  "observations": [
+    "1. Detailed observation on primary language dominance (${github.topLanguage}) citing exact percentages.",
+    "2. Deep analysis of commit circadian rhythm (${github.timeSlot}) and night owl ratio (${github.nightOwlScore}%).",
+    "3. Technical assessment of code complexity (${github.codeComplexityScore}/100) across ${github.publicRepos} repositories.",
+    "4. Open source impact analysis citing stars (${github.totalStars}) and originality ratio (${github.originalityRatio}%).",
+    "5. Algorithmic problem-solving breakdown citing LeetCode stats or practical builder trade-offs."
+  ],
+  "roast": "2-sentence sharp, hilarious roast targeting their specific coding quirks, commit habits, or stack choices.",
+  "praise": "2-sentence glowing praise celebrating their genuine engineering superpower and code impact.",
+  "roastOrPraise": "1-sentence summary verdict.",
+  "devNemesis": "Funny specific developer persona they would clash with in code reviews.",
+  "recommendedStack": "A tailored, funny ideal tech stack recommendation.",
+  "radarStats": {
+    "velocity": 85,
+    "clarity": 82,
+    "algorithms": 78,
+    "stamina": 90,
+    "impact": 72
+  }
 }`
 
       const response = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
@@ -62,7 +87,8 @@ Return ONLY raw JSON matching:
           messages: [
             {
               role: 'system',
-              content: 'Output pure raw JSON without markdown.',
+              content:
+                'You are an expert AI software lead analyst providing deep, witty, analytical profile evaluations in raw JSON format without markdown code blocks.',
             },
             {
               role: 'user',
@@ -70,7 +96,7 @@ Return ONLY raw JSON matching:
             },
           ],
           temperature: 0.65,
-          max_tokens: 500,
+          max_tokens: 650,
         }),
       })
 
@@ -86,9 +112,14 @@ Return ONLY raw JSON matching:
             .trim()
 
           const parsed = JSON.parse(jsonString) as AISummary
-          if (parsed.archetype && parsed.observations && Array.isArray(parsed.observations)) {
-            if (!parsed.roast) parsed.roast = parsed.roastOrPraise || 'Consistently pushing code at ungodly hours.'
-            if (!parsed.praise) parsed.praise = 'Maintains high code momentum across repositories.'
+          if (
+            parsed.archetype &&
+            parsed.observations &&
+            Array.isArray(parsed.observations) &&
+            parsed.observations.length >= 4
+          ) {
+            if (!parsed.roast) parsed.roast = parsed.roastOrPraise || 'Pushes code at ungodly hours.'
+            if (!parsed.praise) parsed.praise = 'Maintains impressive engineering momentum.'
             return parsed
           }
         }
@@ -129,13 +160,15 @@ function generateFallbackSummary(
     auraColor = 'solar-flare'
   }
 
+  const mainLangPct = github.languages[0]?.percentage || 65
+
   const observations: string[] = [
-    `${github.topLanguage} dominates your workflow with ${github.languages[0]?.percentage || 60}% of overall repositories.`,
-    `Primary work window: ${github.timeSlot} with ${github.nightOwlScore}% late-night activity.`,
-    `Code complexity rating stands at ${github.codeComplexityScore}/100 across ${github.publicRepos} repositories.`,
+    `${github.topLanguage} dominates your workflow, accounting for ${mainLangPct}% of your total repository codebase.`,
+    `Primary work window identified as ${github.timeSlot}, displaying a ${github.nightOwlScore}% late-night commit ratio.`,
+    `Code complexity score evaluated at ${github.codeComplexityScore}/100 across ${github.publicRepos} public repositories.`,
     github.totalStars > 0
-      ? `Earned ${github.totalStars} community stars across your open-source repositories.`
-      : `Active builder pushing ${github.recentCommitCount} recent commits & PRs.`,
+      ? `Earned ${github.totalStars} community stars with an originality ratio of ${github.originalityRatio}% non-forked projects.`
+      : `Active contributor maintaining high build velocity with ${github.recentCommitCount} recent commits and PR events.`,
   ]
 
   let roast = ''
@@ -143,19 +176,19 @@ function generateFallbackSummary(
 
   if (leetcode) {
     observations.push(
-      `Solved ${leetcode.totalSolved} LeetCode challenges (${leetcode.easySolved} Easy, ${leetcode.mediumSolved} Medium, ${leetcode.hardSolved} Hard).`
+      `Solved ${leetcode.totalSolved} LeetCode challenges (${leetcode.easySolved} Easy, ${leetcode.mediumSolved} Medium, ${leetcode.hardSolved} Hard) with a ${leetcode.acceptanceRate}% acceptance rate.`
     )
     if (leetcode.hardSolved > 5) {
-      roast = `Spends more time solving Hard Dynamic Programming puzzles than interacting with actual human beings.`
-      praise = `Algorithmic Genius: Conquered ${leetcode.hardSolved} Hard LeetCode problems! Tech interviewers end up asking YOU for career advice.`
+      roast = `Spends more time crafting complex Dynamic Programming memoization tables than interacting with human beings.`
+      praise = `Algorithmic Mastermind: Conquered ${leetcode.hardSolved} Hard LeetCode problems! Technical interviewers end up asking YOU for career advice.`
     } else {
-      roast = `Treats Medium LeetCode problems like production deployments on a Friday afternoon — approached with intense anxiety.`
-      praise = `Consistent Solver: Maintained an impressive acceptance rate of ${leetcode.acceptanceRate}% with an Algorithmic Mastery score of ${leetcode.algoMasteryScore}/100.`
+      roast = `Approaches Medium LeetCode problems like production deployments on a Friday afternoon — with intense anxiety.`
+      praise = `Consistent Problem Solver: Maintained a strong ${leetcode.acceptanceRate}% acceptance accuracy with an Algorithmic Mastery rating of ${leetcode.algoMasteryScore}/100.`
     }
   } else {
-    observations.push('Has zero public LeetCode handles attached — preserving peace of mind.')
+    observations.push('Has zero public LeetCode handles attached — preserving peace of mind and avoiding puzzle grinding.')
     roast = `Refuses to link LeetCode because solving Two Sum for the 14th time isn't how real software gets built.`
-    praise = `Pragmatic Titan: Bypasses online puzzle grinding to ship actual working code directly to GitHub production.`
+    praise = `Pragmatic Titan: Bypasses online puzzle grinding to ship actual working full-stack applications directly to production.`
   }
 
   const velocity = Math.min(100, Math.max(50, github.recentCommitCount * 4 + 45))
