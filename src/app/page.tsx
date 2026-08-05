@@ -4,17 +4,6 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth, SignInButton } from '@clerk/nextjs'
 import { ArrowRight, Loader2 } from 'lucide-react'
-import { GithubIcon } from '@/components/GithubIcon'
-import {
-  LeetCodeLogo,
-  ReactLogo,
-  TypeScriptLogo,
-  PythonLogo,
-  PostgreSQLLogo,
-  TailwindLogo,
-  NextjsLogo,
-  PrismaLogo,
-} from '@/components/BrandLogos'
 import { analyzeDeveloperAction } from '@/app/actions/analysis'
 
 const DYNAMIC_PROCESSING_TEXTS = [
@@ -25,16 +14,43 @@ const DYNAMIC_PROCESSING_TEXTS = [
   'Formulating Developer Archetype & Roast...',
 ]
 
-const REAL_TECH_LOGOS = [
-  { name: 'GitHub', icon: GithubIcon },
-  { name: 'LeetCode', icon: LeetCodeLogo },
-  { name: 'TypeScript', icon: TypeScriptLogo },
-  { name: 'React', icon: ReactLogo },
-  { name: 'Next.js 16', icon: NextjsLogo },
-  { name: 'Python', icon: PythonLogo },
-  { name: 'PostgreSQL', icon: PostgreSQLLogo },
-  { name: 'Prisma', icon: PrismaLogo },
-  { name: 'Tailwind CSS', icon: TailwindLogo },
+const REAL_BRAND_IMAGE_LOGOS = [
+  {
+    name: 'GitHub',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg',
+  },
+  {
+    name: 'LeetCode',
+    src: 'https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/leetcode.svg',
+  },
+  {
+    name: 'TypeScript',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
+  },
+  {
+    name: 'React',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
+  },
+  {
+    name: 'Next.js',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg',
+  },
+  {
+    name: 'Python',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
+  },
+  {
+    name: 'PostgreSQL',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
+  },
+  {
+    name: 'Tailwind CSS',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg',
+  },
+  {
+    name: 'Prisma',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prisma/prisma-original.svg',
+  },
 ]
 
 export default function HomePage() {
@@ -47,13 +63,13 @@ export default function HomePage() {
   const [processingTextIdx, setProcessingTextIdx] = useState(0)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  // Cycle dynamic processing text while loading
+  // Cycle dynamic processing text comfortably every 2.5 seconds
   useEffect(() => {
     let interval: NodeJS.Timeout
     if (isAnalyzing) {
       interval = setInterval(() => {
         setProcessingTextIdx((prev) => (prev + 1) % DYNAMIC_PROCESSING_TEXTS.length)
-      }, 1100)
+      }, 2500)
     }
     return () => clearInterval(interval)
   }, [isAnalyzing])
@@ -98,29 +114,28 @@ export default function HomePage() {
             <div className="w-10 h-10 rounded-full bg-fuchsia-500/20 text-fuchsia-400 mx-auto flex items-center justify-center animate-spin">
               <Loader2 className="w-6 h-6" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-white font-mono tracking-tight transition-all duration-300">
+            <h2 className="text-2xl sm:text-3xl font-black text-white font-mono tracking-tight transition-all duration-500">
               {DYNAMIC_PROCESSING_TEXTS[processingTextIdx]}
             </h2>
-            <p className="text-xs font-mono text-gray-500">Please hold on while we build your aura card...</p>
+            <p className="text-xs font-mono text-gray-500">Building your developer aura card...</p>
           </div>
 
-          {/* Sliding Tech Ticker Marquee with REAL SVG Logos */}
-          <div className="w-full overflow-hidden mask-fade-edges py-6 bg-[#0c0c0c] rounded-3xl space-y-4">
+          {/* Sliding Tech Ticker Marquee with REAL Official Logo Images */}
+          <div className="w-full overflow-hidden mask-fade-edges py-6 bg-[#0c0c0c] rounded-3xl">
             <div className="animate-marquee flex items-center gap-8">
-              {[...REAL_TECH_LOGOS, ...REAL_TECH_LOGOS, ...REAL_TECH_LOGOS].map((item, idx) => {
-                const IconComponent = item.icon
-                return (
+              {[...REAL_BRAND_IMAGE_LOGOS, ...REAL_BRAND_IMAGE_LOGOS, ...REAL_BRAND_IMAGE_LOGOS].map(
+                (item, idx) => (
                   <div
                     key={idx}
                     className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-[#161616] shrink-0"
                   >
-                    <IconComponent className="w-5 h-5" />
+                    <img src={item.src} alt={item.name} className="w-5 h-5 object-contain" />
                     <span className="text-xs font-mono font-bold text-gray-200">
                       {item.name}
                     </span>
                   </div>
                 )
-              })}
+              )}
             </div>
           </div>
         </div>
