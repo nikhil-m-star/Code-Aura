@@ -51,6 +51,54 @@ const REAL_BRAND_IMAGE_LOGOS = [
     name: 'Prisma',
     src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prisma/prisma-original.svg',
   },
+  {
+    name: 'Node.js',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
+  },
+  {
+    name: 'Docker',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
+  },
+  {
+    name: 'GraphQL',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg',
+  },
+  {
+    name: 'Rust',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg',
+  },
+  {
+    name: 'Go',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original-wordmark.svg',
+  },
+  {
+    name: 'Redis',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg',
+  },
+  {
+    name: 'Vue',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg',
+  },
+  {
+    name: 'C++',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',
+  },
+  {
+    name: 'Swift',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg',
+  },
+  {
+    name: 'Kotlin',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-original.svg',
+  },
+  {
+    name: 'MongoDB',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
+  },
+  {
+    name: 'Linux',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg',
+  },
 ]
 
 function DynamicScalingTicker({ logos }: { logos: typeof REAL_BRAND_IMAGE_LOGOS }) {
@@ -89,7 +137,7 @@ function DynamicScalingTicker({ logos }: { logos: typeof REAL_BRAND_IMAGE_LOGOS 
     return () => cancelAnimationFrame(animFrame)
   }, [])
 
-  const repeatedLogos = [...logos, ...logos, ...logos, ...logos]
+  const repeatedLogos = [...logos, ...logos, ...logos]
 
   return (
     <div
@@ -178,7 +226,7 @@ export default function HomePage() {
             {DYNAMIC_PROCESSING_TEXTS[processingTextIdx]}
           </h2>
 
-          {/* Dynamic Wide Fisheye Scaling Ticker - NO TEXT, BIGGER LOGOS, WIDER AREA */}
+          {/* Dynamic Wide Fisheye Scaling Ticker - EXPANDED TECH LOGOS */}
           <DynamicScalingTicker logos={REAL_BRAND_IMAGE_LOGOS} />
         </div>
       ) : (
