@@ -47,6 +47,9 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
     tierBadgeBg = 'bg-emerald-400 text-black'
   }
 
+  const roastText = ai.roast || ai.roastOrPraise || 'Consistently pushing code at ungodly hours.'
+  const praiseText = ai.praise || 'Maintains incredible build momentum across open source projects.'
+
   return (
     <div
       ref={cardRef}
@@ -106,6 +109,35 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
           "{ai.archetype}"
         </h3>
         <p className="text-sm text-gray-300 italic pt-1">"{ai.tagline}"</p>
+      </div>
+
+      {/* DEDICATED SEPARATE ROAST & PRAISE BOXES */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* 🔥 THE ROAST */}
+        <div className="p-6 rounded-2xl bg-[#241318] space-y-2">
+          <div className="flex items-center gap-2">
+            <span className="text-base">🔥</span>
+            <span className="text-[11px] font-mono text-rose-400 font-bold uppercase tracking-widest">
+              The Roast
+            </span>
+          </div>
+          <p className="text-sm text-rose-100 font-medium leading-relaxed italic">
+            "{roastText}"
+          </p>
+        </div>
+
+        {/* 👑 THE PRAISE */}
+        <div className="p-6 rounded-2xl bg-[#12221c] space-y-2">
+          <div className="flex items-center gap-2">
+            <span className="text-base">👑</span>
+            <span className="text-[11px] font-mono text-emerald-400 font-bold uppercase tracking-widest">
+              The Praise
+            </span>
+          </div>
+          <p className="text-sm text-emerald-100 font-medium leading-relaxed italic">
+            "{praiseText}"
+          </p>
+        </div>
       </div>
 
       {/* Artistic 5-Axis Colorful Skill Ratings */}
@@ -278,16 +310,6 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
             </div>
           ))}
         </div>
-      </div>
-
-      {/* Roast & Praise */}
-      <div className="p-6 rounded-2xl bg-[#241420] space-y-2">
-        <span className="text-[11px] font-mono text-fuchsia-400 font-bold uppercase tracking-widest block">
-          The Roast & Praise
-        </span>
-        <p className="text-sm sm:text-base text-fuchsia-100 font-medium italic leading-relaxed">
-          "{ai.roastOrPraise}"
-        </p>
       </div>
 
       {/* Clean Brand Watermark */}
