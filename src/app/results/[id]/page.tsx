@@ -5,9 +5,10 @@ import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import confetti from 'canvas-confetti'
 import { toPng } from 'html-to-image'
-import { Download, ArrowLeft, Share2 } from 'lucide-react'
+import { Download, ArrowLeft, Share2, Award, FileText } from 'lucide-react'
 import { getAnalysisByIdAction } from '@/app/actions/analysis'
 import { AuraCard } from '@/components/AuraCard'
+import { AuraFutCard } from '@/components/AuraFutCard'
 import { GitHubUserStats } from '@/lib/services/github'
 import { LeetCodeUserStats } from '@/lib/services/leetcode'
 import { AISummary } from '@/lib/services/nvidia'
@@ -29,9 +30,12 @@ export default function AnalysisResultsPage() {
   const [analysis, setAnalysis] = useState<AnalysisData | null>(null)
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState(false)
-  const [downloading, setDownloading] = useState(false)
+  const [downloadingReport, setDownloadingReport] = useState(false)
+  const [downloadingFut, setDownloadingFut] = useState(false)
+  const [activeTab, setActiveTab] = useState<'both' | 'report' | 'card'>('both')
 
-  const cardRef = useRef<HTMLDivElement>(null)
+  const reportCardRef = useRef<HTMLDivElement>(null)
+  const futCardRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     async function loadAnalysis() {
@@ -41,10 +45,10 @@ export default function AnalysisResultsPage() {
       if (data) {
         setAnalysis(data as any)
         confetti({
-          particleCount: 50,
-          spread: 60,
+          particleCount: 60,
+          spread: 70,
           origin: { y: 0.6 },
-          colors: ['#ffffff', '#888888', '#aaaaaa'],
+          colors: ['#ffd700', '#c0c0c0', '#e2e8f0', '#ffffff'],
         })
       }
       setLoading(false)
@@ -59,26 +63,42 @@ export default function AnalysisResultsPage() {
     setTimeout(() => setCopied(false), 2500)
   }
 
-  const handleDownloadCard = async () => {
-    if (!cardRef.current) return
-    setDownloading(true)
+  const handleDownloadReport = async () => {
+    if (!reportCardRef.current) return
+    setDownloadingReport(true)
     try {
-      const dataUrl = await toPng(cardRef.current, { cacheBust: true, quality: 0.95 })
+      const dataUrl = await toPng(reportCardRef.current, { cacheBust: true, quality: 0.95 })
       const link = document.createElement('a')
-      link.download = `CodeAura-${analysis?.githubUsername || 'Developer'}.png`
+      link.download = `CodeAura-Report-${analysis?.githubUsername || 'Dev'}.png`
       link.href = dataUrl
       link.click()
     } catch (err) {
-      console.error('Failed to capture card image:', err)
+      console.error('Failed to capture report image:', err)
     } finally {
-      setDownloading(false)
+      setDownloadingReport(false)
+    }
+  }
+
+  const handleDownloadFutCard = async () => {
+    if (!futCardRef.current) return
+    setDownloadingFut(true)
+    try {
+      const dataUrl = await toPng(futCardRef.current, { cacheBust: true, quality: 0.95 })
+      const link = document.createElement('a')
+      link.download = `CodeAura-ScoutingCard-${analysis?.githubUsername || 'Dev'}.png`
+      link.href = dataUrl
+      link.click()
+    } catch (err) {
+      console.error('Failed to capture FUT card image:', err)
+    } finally {
+      setDownloadingFut(false)
     }
   }
 
   if (loading) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center py-20 px-4">
-        <p className="text-sm font-mono text-gray-500 animate-pulse">Loading Aura...</p>
+        <p className="text-sm font-mono text-gray-500 animate-pulse">Loading Aura Analysis & Card...</p>
       </div>
     )
   }
@@ -99,50 +119,137 @@ export default function AnalysisResultsPage() {
   }
 
   return (
-    <div className="flex-1 flex flex-col items-center px-4 py-8 space-y-6 bg-black">
-      {/* Action Bar */}
-      <div className="w-full max-w-3xl flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#0c0c0c] p-3.5 px-5 rounded-2xl">
+    <div className="flex-1 flex flex-col items-center px-4 py-8 space-y-8 bg-black min-h-screen">
+      {/* ─── Top Control Action Bar ─── */}
+      <div className="w-full max-w-5xl flex flex-col md:flex-row items-center justify-between gap-4 bg-[#0c0c0e] p-4 px-6 rounded-2xl border border-white/10 shadow-xl">
         <Link
           href="/"
-          className="flex items-center gap-2 text-xs font-semibold text-gray-400 hover:text-white transition-all"
+          className="flex items-center gap-2 text-xs font-semibold text-gray-400 hover:text-white transition-all shrink-0"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Analyze Another</span>
         </Link>
 
-        <div className="flex items-center gap-2">
+        {/* View Toggle Tabs */}
+        <div className="flex items-center gap-1 bg-[#16161a] p-1 rounded-xl">
+          <button
+            onClick={() => setActiveTab('both')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+              activeTab === 'both' ? 'bg-white text-black shadow' : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            Side-by-Side
+          </button>
+          <button
+            onClick={() => setActiveTab('report')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+              activeTab === 'report' ? 'bg-white text-black shadow' : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            <FileText className="w-3.5 h-3.5" />
+            <span>Full Report</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('card')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+              activeTab === 'card' ? 'bg-white text-black shadow' : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            <Award className="w-3.5 h-3.5" />
+            <span>FIFA Scouting Card</span>
+          </button>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex items-center gap-2 flex-wrap justify-center">
           <button
             onClick={handleCopyLink}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-gray-300 bg-[#181818] hover:bg-[#222222] transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-gray-300 bg-[#18181c] hover:bg-[#22222a] transition-all cursor-pointer border border-white/5"
           >
             {copied ? (
-              <span className="text-white">Link Copied</span>
+              <span className="text-emerald-400 font-bold">Link Copied!</span>
             ) : (
               <>
                 <Share2 className="w-3.5 h-3.5" />
-                <span>Share Link</span>
+                <span>Share</span>
               </>
             )}
           </button>
 
           <button
-            onClick={handleDownloadCard}
-            disabled={downloading}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-black bg-white hover:bg-gray-200 transition-all cursor-pointer disabled:opacity-50"
+            onClick={handleDownloadFutCard}
+            disabled={downloadingFut}
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-amber-300 bg-[#251e0f] hover:bg-[#332914] transition-all cursor-pointer disabled:opacity-50 border border-amber-500/30"
+          >
+            <Award className="w-3.5 h-3.5 text-amber-400" />
+            <span>{downloadingFut ? 'Capturing...' : 'Download Card'}</span>
+          </button>
+
+          <button
+            onClick={handleDownloadReport}
+            disabled={downloadingReport}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-black bg-white hover:bg-gray-200 transition-all cursor-pointer disabled:opacity-50"
           >
             <Download className="w-3.5 h-3.5" />
-            <span>{downloading ? 'Downloading...' : 'Download Card'}</span>
+            <span>{downloadingReport ? 'Capturing...' : 'Download Report'}</span>
           </button>
         </div>
       </div>
 
-      {/* Aura Card */}
-      <AuraCard
-        cardRef={cardRef}
-        github={analysis.githubStats}
-        leetcode={analysis.leetcodeStats}
-        ai={analysis.aiSummary}
-      />
+      {/* ─── Main Content Display: Full Report & FIFA Player Card ─── */}
+      <div className="w-full max-w-5xl flex flex-col items-center">
+        {activeTab === 'both' && (
+          <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* FIFA Scouting Player Card Sticky / Prominent Column */}
+            <div className="lg:col-span-4 flex flex-col items-center space-y-4 lg:sticky lg:top-8">
+              <div className="text-center space-y-1">
+                <span className="text-[11px] font-mono font-black uppercase tracking-widest text-amber-400">
+                  Scouting Trading Card
+                </span>
+                <p className="text-xs text-gray-400">World Cup 26 Player Rating</p>
+              </div>
+              <AuraFutCard
+                cardRef={futCardRef}
+                github={analysis.githubStats}
+                leetcode={analysis.leetcodeStats}
+                ai={analysis.aiSummary}
+              />
+            </div>
+
+            {/* Detailed Analysis Report Column */}
+            <div className="lg:col-span-8 w-full">
+              <AuraCard
+                cardRef={reportCardRef}
+                github={analysis.githubStats}
+                leetcode={analysis.leetcodeStats}
+                ai={analysis.aiSummary}
+              />
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'report' && (
+          <div className="w-full max-w-3xl">
+            <AuraCard
+              cardRef={reportCardRef}
+              github={analysis.githubStats}
+              leetcode={analysis.leetcodeStats}
+              ai={analysis.aiSummary}
+            />
+          </div>
+        )}
+
+        {activeTab === 'card' && (
+          <div className="py-8 flex flex-col items-center space-y-6">
+            <AuraFutCard
+              cardRef={futCardRef}
+              github={analysis.githubStats}
+              leetcode={analysis.leetcodeStats}
+              ai={analysis.aiSummary}
+            />
+          </div>
+        )}
+      </div>
     </div>
   )
 }
