@@ -92,19 +92,19 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
     { label: 'MAIN LANG', val: github.topLanguage },
   ]
 
-  const displayName = (github.name || github.username).toUpperCase().slice(0, 15)
+  const displayName = (github.name || github.username).toUpperCase().slice(0, 14)
 
   return (
     <div
       ref={cardRef}
-      className="relative w-[310px] sm:w-[340px] mx-auto select-none transition-transform duration-200 ease-out py-2 font-sans"
+      className="relative w-[300px] sm:w-[325px] mx-auto select-none transition-transform duration-200 ease-out py-2 font-sans overflow-hidden"
     >
       <div
         ref={containerRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{ transform, transition: transform ? 'transform 0.1s ease-out' : 'transform 0.5s ease' }}
-        className="relative w-full h-[490px] cursor-pointer"
+        className="relative w-full h-[470px] cursor-pointer"
       >
         {/* SVG Shield Background Shape & Trims */}
         <svg
@@ -165,62 +165,62 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
         />
 
         {/* Card Content Overlay */}
-        <div className="absolute inset-0 p-7 flex flex-col justify-between z-20 text-white font-sans">
+        <div className="absolute inset-0 px-8 pt-5 pb-6 flex flex-col justify-between z-20 text-white font-sans overflow-hidden">
           {/* ── Top Section: Score + Logo ── */}
-          <div className="flex justify-between items-start pt-2">
+          <div className="flex justify-between items-start pt-1">
             <div className="flex flex-col items-center">
-              <span className={`text-4xl sm:text-5xl font-black ${theme.text} leading-none tracking-tight`}>
+              <span className={`text-3xl sm:text-4xl font-black ${theme.text} leading-none tracking-tight`}>
                 {score}
               </span>
-              <span className={`text-[10px] font-black tracking-widest ${theme.label} mt-1 uppercase`}>
+              <span className={`text-[9px] font-black tracking-widest ${theme.label} mt-0.5 uppercase`}>
                 AURA
               </span>
             </div>
 
             <div className="flex flex-col items-end">
-              <div className="flex items-center gap-1.5">
-                <CodeAuraLogo className="w-5 h-5" />
-                <span className={`text-xs font-black tracking-wider ${theme.text}`}>CodeAura</span>
+              <div className="flex items-center gap-1">
+                <CodeAuraLogo className="w-4 h-4" />
+                <span className={`text-[11px] font-black tracking-wider ${theme.text}`}>CodeAura</span>
               </div>
-              <span className={`text-[9px] font-black tracking-widest ${theme.label} mt-0.5`}>
+              <span className={`text-[8px] font-black tracking-widest ${theme.label} mt-0.5`}>
                 {theme.tierLabel}
               </span>
             </div>
           </div>
 
           {/* ── Center Developer Avatar ── */}
-          <div className="flex flex-col items-center my-1">
+          <div className="flex flex-col items-center my-0.5">
             <div className="relative">
               <img
                 src={github.avatarUrl}
                 alt={github.username}
-                className="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover shadow-xl bg-black/60"
+                className="w-20 h-20 sm:w-22 sm:h-22 rounded-full object-cover shadow-xl bg-black/60"
               />
-              <span className="absolute bottom-0 right-1 w-3.5 h-3.5 rounded-full bg-emerald-400" />
+              <span className="absolute bottom-0 right-0.5 w-3 h-3 rounded-full bg-emerald-400" />
             </div>
 
             {/* Developer Handle */}
-            <h3 className={`text-lg sm:text-xl font-black ${theme.text} tracking-wider mt-3 uppercase truncate max-w-[200px] text-center`}>
+            <h3 className={`text-base sm:text-lg font-black ${theme.text} tracking-wider mt-2.5 uppercase truncate max-w-[160px] text-center`}>
               {displayName}
             </h3>
 
             {/* Horizontal Line Divider */}
-            <div className="w-4/5 h-[1px] bg-white/15 my-2" />
+            <div className="w-3/4 h-[1px] bg-white/15 my-1.5" />
           </div>
 
           {/* ── Bottom Section: Real Developer Metrics ── */}
-          <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 px-2 font-sans text-xs sm:text-sm overflow-hidden">
+          <div className="grid grid-cols-2 gap-x-3 gap-y-1 px-3 font-sans overflow-hidden">
             {realStats.map((s) => (
               <div key={s.label} className="flex items-center justify-between min-w-0">
-                <span className={`text-[10px] font-extrabold ${theme.label} shrink-0 mr-1`}>{s.label}</span>
-                <span className={`font-black ${theme.subtext} truncate text-right`}>{s.val}</span>
+                <span className={`text-[9px] font-extrabold ${theme.label} shrink-0 mr-1`}>{s.label}</span>
+                <span className={`text-[11px] font-black ${theme.subtext} truncate text-right max-w-[65px]`}>{s.val}</span>
               </div>
             ))}
           </div>
 
           {/* Archetype Footer */}
-          <div className="pb-2 text-center overflow-hidden">
-            <span className={`text-[11px] font-black ${theme.label} tracking-widest uppercase block truncate px-2`}>
+          <div className="pb-1 text-center overflow-hidden">
+            <span className={`text-[10px] font-black ${theme.label} tracking-widest uppercase block truncate px-2 max-w-[180px] mx-auto`}>
               {ai.archetype}
             </span>
           </div>

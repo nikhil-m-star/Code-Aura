@@ -15,7 +15,7 @@
 
   <br />
 
-  [🌐 Live Web Application](https://code-aura-app.vercel.app) • [📂 GitHub Repository](https://github.com/nikhil-m-star/Code-Aura)
+  [🌐 Live Web Application](https://codeisaura.vercel.app) • [📂 GitHub Repository](https://github.com/nikhil-m-star/Code-Aura)
 
 </div>
 

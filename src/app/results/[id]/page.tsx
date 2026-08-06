@@ -201,13 +201,7 @@ export default function AnalysisResultsPage() {
         {activeTab === 'both' && (
           <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* Developer Card Column */}
-            <div className="lg:col-span-4 flex flex-col items-center space-y-4 lg:sticky lg:top-8">
-              <div className="text-center space-y-1">
-                <span className="text-[11px] font-mono font-black uppercase tracking-widest text-amber-400">
-                  Developer Trading Card
-                </span>
-                <p className="text-xs text-gray-400">Developer Telemetry Rating</p>
-              </div>
+            <div className="lg:col-span-4 flex flex-col items-center lg:sticky lg:top-8">
               <AuraFutCard
                 cardRef={futCardRef}
                 github={analysis.githubStats}
