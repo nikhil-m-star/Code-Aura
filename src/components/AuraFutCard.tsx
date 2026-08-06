@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useRef } from 'react'
+import { Sparkles, Star, FolderGit2, Cpu, Flame, Activity, Clock } from 'lucide-react'
 import { GitHubUserStats } from '@/lib/services/github'
 import { LeetCodeUserStats } from '@/lib/services/leetcode'
 import { AISummary } from '@/lib/services/nvidia'
@@ -28,9 +29,9 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
 
   const score = ai.auraScore || 85
   const isGold = score >= 85 || github.totalStars >= 1000
-  const isSilver = score >= 70 && !isGold
+  const isSilver = score >= 72 && !isGold
 
-  // Handle 3D Tilt on Mouse Move
+  // 3D Tilt on Mouse Movement
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current) return
     const rect = containerRef.current.getBoundingClientRect()
@@ -39,14 +40,14 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
     const centerX = rect.width / 2
     const centerY = rect.height / 2
 
-    const rotateX = ((y - centerY) / centerY) * -12
-    const rotateY = ((x - centerX) / centerX) * 12
+    const rotateX = ((y - centerY) / centerY) * -10
+    const rotateY = ((x - centerX) / centerX) * 10
 
     const glossX = (x / rect.width) * 100
     const glossY = (y / rect.height) * 100
 
-    setTransform(`perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.03, 1.03, 1.03)`)
-    setGlossPos({ x: glossX, y: glossY, opacity: 0.35 })
+    setTransform(`perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`)
+    setGlossPos({ x: glossX, y: glossY, opacity: 0.3 })
   }
 
   const handleMouseLeave = () => {
@@ -57,172 +58,154 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
   // Tier Theme Config
   const theme = isGold
     ? {
-        stroke: '#fce085',
-        fill: 'url(#grad-gold)',
-        text: 'text-[#fce085]',
-        label: 'text-[#d4af37]',
-        subtext: 'text-[#fef3c7]',
-        tierLabel: 'GOLD TIER',
+        borderGradient: 'from-[#fce085] via-[#d4af37] to-[#8a6d1c]',
+        scoreText: 'text-[#fce085]',
+        tierBg: 'bg-[#d4af37]/20 text-[#fce085]',
+        tierName: 'GOLD TIER',
+        glowColor: 'rgba(212, 175, 55, 0.25)',
+        badgeBg: 'bg-[#d4af37]',
+        badgeText: 'text-black',
+        ringColor: 'ring-[#d4af37]',
       }
     : isSilver
     ? {
-        stroke: '#e2e8f0',
-        fill: 'url(#grad-silver)',
-        text: 'text-[#f1f5f9]',
-        label: 'text-[#94a3b8]',
-        subtext: 'text-[#f8fafc]',
-        tierLabel: 'SILVER TIER',
+        borderGradient: 'from-[#ffffff] via-[#94a3b8] to-[#475569]',
+        scoreText: 'text-[#f1f5f9]',
+        tierBg: 'bg-[#94a3b8]/20 text-[#f1f5f9]',
+        tierName: 'SILVER TIER',
+        glowColor: 'rgba(148, 163, 184, 0.25)',
+        badgeBg: 'bg-[#94a3b8]',
+        badgeText: 'text-black',
+        ringColor: 'ring-[#94a3b8]',
       }
     : {
-        stroke: '#f59e0b',
-        fill: 'url(#grad-bronze)',
-        text: 'text-[#fef3c7]',
-        label: 'text-[#d97706]',
-        subtext: 'text-[#fffbeb]',
-        tierLabel: 'BRONZE TIER',
+        borderGradient: 'from-[#f59e0b] via-[#b45309] to-[#78350f]',
+        scoreText: 'text-[#fef3c7]',
+        tierBg: 'bg-[#b45309]/20 text-[#fef3c7]',
+        tierName: 'BRONZE TIER',
+        glowColor: 'rgba(180, 83, 9, 0.25)',
+        badgeBg: 'bg-[#b45309]',
+        badgeText: 'text-white',
+        ringColor: 'ring-[#b45309]',
       }
 
-  // Real Developer Stats
   const realStats = [
-    { label: 'STARS', val: formatCompactNumber(github.totalStars) },
-    { label: 'REPOS', val: formatCompactNumber(github.publicRepos) },
-    { label: 'SOLVED', val: formatCompactNumber(leetcode ? leetcode.totalSolved : 'N/A') },
-    { label: 'COMMITS', val: formatCompactNumber(github.recentCommitCount) },
-    { label: 'COMPLEXITY', val: `${github.codeComplexityScore}/100` },
-    { label: 'MAIN LANG', val: github.topLanguage },
+    { label: 'STARS', val: formatCompactNumber(github.totalStars), icon: Star, color: 'text-amber-400' },
+    { label: 'REPOS', val: formatCompactNumber(github.publicRepos), icon: FolderGit2, color: 'text-cyan-400' },
+    { label: 'SOLVED', val: formatCompactNumber(leetcode ? leetcode.totalSolved : 'N/A'), icon: Cpu, color: 'text-emerald-400' },
+    { label: 'COMMITS', val: formatCompactNumber(github.recentCommitCount), icon: Flame, color: 'text-rose-400' },
+    { label: 'COMPLEXITY', val: `${github.codeComplexityScore}/100`, icon: Activity, color: 'text-purple-400' },
+    { label: 'WORK SHIFT', val: github.timeSlot.split(' ')[0], icon: Clock, color: 'text-fuchsia-400' },
   ]
 
-  const displayName = (github.name || github.username).toUpperCase().slice(0, 14)
+  const displayName = github.name || github.username
 
   return (
     <div
       ref={cardRef}
-      className="relative w-[300px] sm:w-[325px] mx-auto select-none transition-transform duration-200 ease-out py-2 font-sans overflow-hidden"
+      className="relative w-[320px] sm:w-[340px] mx-auto select-none transition-transform duration-200 ease-out py-2 font-sans"
     >
       <div
         ref={containerRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        style={{ transform, transition: transform ? 'transform 0.1s ease-out' : 'transform 0.5s ease' }}
-        className="relative w-full h-[470px] cursor-pointer"
+        style={{
+          transform,
+          transition: transform ? 'transform 0.1s ease-out' : 'transform 0.5s ease',
+          boxShadow: `0 20px 40px -15px ${theme.glowColor}`,
+        }}
+        className={`relative w-full rounded-[30px] p-[2px] bg-gradient-to-b ${theme.borderGradient} cursor-pointer overflow-hidden`}
       >
-        {/* SVG Shield Background Shape & Trims */}
-        <svg
-          className="absolute inset-0 w-full h-full drop-shadow-[0_20px_35px_rgba(0,0,0,0.85)]"
-          viewBox="0 0 248 372"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <defs>
-            <linearGradient id="grad-gold" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#47370d" />
-              <stop offset="35%" stopColor="#2e2308" />
-              <stop offset="70%" stopColor="#1a1304" />
-              <stop offset="100%" stopColor="#0d0a02" />
-            </linearGradient>
-
-            <linearGradient id="grad-silver" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#2c3340" />
-              <stop offset="35%" stopColor="#1b2028" />
-              <stop offset="70%" stopColor="#111419" />
-              <stop offset="100%" stopColor="#080a0d" />
-            </linearGradient>
-
-            <linearGradient id="grad-bronze" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#3d2215" />
-              <stop offset="35%" stopColor="#26150d" />
-              <stop offset="70%" stopColor="#170c07" />
-              <stop offset="100%" stopColor="#0a0503" />
-            </linearGradient>
-          </defs>
-
-          {/* Outer Shield Frame Path */}
-          <path
-            d="M124 21C150 15 178 11 202 12C218 13 230 20 235 36C238 46 239 54 239 64C239 130 239 200 234 254C231 294 218 322 188 347C170 361 146 369 124 370C102 369 78 361 60 347C30 322 17 294 14 254C9 200 9 130 9 64C9 54 10 46 13 36C18 20 30 13 46 12C70 11 98 15 124 21Z"
-            fill={theme.fill}
-            stroke={theme.stroke}
-            strokeWidth="2.5"
+        {/* Main Card Body */}
+        <div className="w-full h-full rounded-[28px] bg-[#0c0c0e] p-6 flex flex-col justify-between relative overflow-hidden text-white">
+          {/* Subtle Ambient Radial Glow */}
+          <div
+            className="absolute -top-20 -right-20 w-44 h-44 rounded-full blur-3xl pointer-events-none"
+            style={{ backgroundColor: theme.glowColor }}
           />
 
-          {/* Inner Accent Line Trim */}
-          <path
-            d="M124 21C150 15 178 11 202 12C218 13 230 20 235 36C238 46 239 54 239 64C239 130 239 200 234 254C231 294 218 322 188 347C170 361 146 369 124 370C102 369 78 361 60 347C30 322 17 294 14 254C9 200 9 130 9 64C9 54 10 46 13 36C18 20 30 13 46 12C70 11 98 15 124 21Z"
-            transform="translate(124 186) scale(.94) translate(-124 -186)"
-            stroke={theme.stroke}
-            strokeWidth="1"
-            strokeOpacity="0.4"
-            fill="none"
+          {/* Interactive Dynamic Sheen */}
+          <div
+            className="absolute inset-0 pointer-events-none rounded-[28px] transition-opacity duration-300 z-30"
+            style={{
+              background: `radial-gradient(circle at ${glossPos.x}% ${glossPos.y}%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%)`,
+              opacity: glossPos.opacity,
+            }}
           />
-        </svg>
 
-        {/* Dynamic Interactive Light Sheen Effect */}
-        <div
-          className="absolute inset-0 pointer-events-none rounded-[36px] transition-opacity duration-300 z-30"
-          style={{
-            background: `radial-gradient(circle at ${glossPos.x}% ${glossPos.y}%, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 65%)`,
-            opacity: glossPos.opacity,
-          }}
-        />
-
-        {/* Card Content Overlay */}
-        <div className="absolute inset-0 px-8 pt-5 pb-6 flex flex-col justify-between z-20 text-white font-sans overflow-hidden">
-          {/* ── Top Section: Score + Logo ── */}
-          <div className="flex justify-between items-start pt-1">
-            <div className="flex flex-col items-center">
-              <span className={`text-3xl sm:text-4xl font-black ${theme.text} leading-none tracking-tight`}>
+          {/* ── Top Bar: Score + Brand Crest ── */}
+          <div className="flex justify-between items-start relative z-10">
+            <div className="flex items-center gap-3">
+              <span className={`text-4xl sm:text-5xl font-black ${theme.scoreText} leading-none tracking-tight`}>
                 {score}
               </span>
-              <span className={`text-[9px] font-black tracking-widest ${theme.label} mt-0.5 uppercase`}>
-                AURA
-              </span>
+              <div className="flex flex-col items-start">
+                <span className="text-[9px] font-black uppercase tracking-widest text-gray-400">Aura</span>
+                <span className={`text-[10px] font-black px-2 py-0.5 rounded-md ${theme.tierBg} mt-0.5`}>
+                  {theme.tierName}
+                </span>
+              </div>
             </div>
 
-            <div className="flex flex-col items-end">
-              <div className="flex items-center gap-1">
-                <CodeAuraLogo className="w-4 h-4" />
-                <span className={`text-[11px] font-black tracking-wider ${theme.text}`}>CodeAura</span>
-              </div>
-              <span className={`text-[8px] font-black tracking-widest ${theme.label} mt-0.5`}>
-                {theme.tierLabel}
-              </span>
+            <div className="flex items-center gap-1.5 opacity-90">
+              <CodeAuraLogo className="w-5 h-5" />
+              <span className="text-xs font-black tracking-wider text-white">CodeAura</span>
             </div>
           </div>
 
-          {/* ── Center Developer Avatar ── */}
-          <div className="flex flex-col items-center my-0.5">
+          {/* ── Hero Profile Section ── */}
+          <div className="flex flex-col items-center text-center my-4 relative z-10">
             <div className="relative">
               <img
                 src={github.avatarUrl}
                 alt={github.username}
-                className="w-20 h-20 sm:w-22 sm:h-22 rounded-full object-cover shadow-xl bg-black/60"
+                className={`w-20 h-20 sm:w-22 sm:h-22 rounded-2xl object-cover bg-black ring-2 ${theme.ringColor} shadow-xl`}
               />
-              <span className="absolute bottom-0 right-0.5 w-3 h-3 rounded-full bg-emerald-400" />
+              <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-400 ring-4 ring-[#0c0c0e]" />
             </div>
 
-            {/* Developer Handle */}
-            <h3 className={`text-base sm:text-lg font-black ${theme.text} tracking-wider mt-2.5 uppercase truncate max-w-[160px] text-center`}>
+            <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight mt-3 truncate max-w-[240px]">
               {displayName}
             </h3>
 
-            {/* Horizontal Line Divider */}
-            <div className="w-3/4 h-[1px] bg-white/15 my-1.5" />
+            <div className="flex items-center gap-2 mt-1">
+              <span className="text-xs font-bold text-gray-400">@{github.username}</span>
+              <span className={`text-[10px] font-black px-2 py-0.5 rounded-md ${theme.badgeBg} ${theme.badgeText}`}>
+                {github.topLanguage}
+              </span>
+            </div>
           </div>
 
-          {/* ── Bottom Section: Real Developer Metrics ── */}
-          <div className="grid grid-cols-2 gap-x-3 gap-y-1 px-3 font-sans overflow-hidden">
-            {realStats.map((s) => (
-              <div key={s.label} className="flex items-center justify-between min-w-0">
-                <span className={`text-[9px] font-extrabold ${theme.label} shrink-0 mr-1`}>{s.label}</span>
-                <span className={`text-[11px] font-black ${theme.subtext} truncate text-right max-w-[65px]`}>{s.val}</span>
-              </div>
-            ))}
+          {/* ── AI Archetype Banner ── */}
+          <div className="p-3.5 rounded-2xl bg-[#141418] text-center space-y-0.5 relative z-10 border-l-2 border-white/20">
+            <div className="flex items-center justify-center gap-1 text-[10px] font-black uppercase tracking-widest text-gray-400">
+              <Sparkles className="w-3 h-3 text-amber-300" />
+              <span>AI Archetype</span>
+            </div>
+            <p className="text-sm font-black text-white truncate px-1">&ldquo;{ai.archetype}&rdquo;</p>
           </div>
 
-          {/* Archetype Footer */}
-          <div className="pb-1 text-center overflow-hidden">
-            <span className={`text-[10px] font-black ${theme.label} tracking-widest uppercase block truncate px-2 max-w-[180px] mx-auto`}>
-              {ai.archetype}
-            </span>
+          {/* ── Bottom Grid: 6 Telemetry Stats (2x3) ── */}
+          <div className="grid grid-cols-2 gap-2 mt-4 relative z-10">
+            {realStats.map((s) => {
+              const IconComp = s.icon
+              return (
+                <div
+                  key={s.label}
+                  className="p-2.5 rounded-xl bg-[#141418] flex items-center justify-between min-w-0"
+                >
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <IconComp className={`w-3.5 h-3.5 ${s.color} shrink-0`} />
+                    <span className="text-[10px] font-extrabold text-gray-400 tracking-wider truncate">
+                      {s.label}
+                    </span>
+                  </div>
+                  <span className="text-xs font-black text-white truncate text-right shrink-0 ml-1">
+                    {s.val}
+                  </span>
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>
