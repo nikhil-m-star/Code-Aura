@@ -25,7 +25,7 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
     velocity: 80,
     clarity: 85,
     algorithms: leetcode ? 75 : 55,
-    stamina: 88,
+    stamina: 75,
     impact: 70,
   }
 

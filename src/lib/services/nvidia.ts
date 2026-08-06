@@ -52,7 +52,7 @@ Return ONLY a raw JSON object with zero markdown syntax matching:
   "archetype": "Witty 2-4 word developer archetype title",
   "tagline": "Sharp 1-sentence synopsis of their dev methodology",
   "auraColor": "cyberpunk",
-  "auraScore": 88,
+  "auraScore": <integer 10-99 evaluated dynamically based on stats>,
   "keyVibe": "2-3 word badge",
   "observations": [
     "1. Detailed observation on primary language dominance (${github.topLanguage}) citing exact percentages.",
@@ -67,11 +67,11 @@ Return ONLY a raw JSON object with zero markdown syntax matching:
   "devNemesis": "Funny specific developer persona they would clash with in code reviews.",
   "recommendedStack": "A tailored, funny ideal tech stack recommendation.",
   "radarStats": {
-    "velocity": 85,
-    "clarity": 82,
-    "algorithms": 78,
-    "stamina": 90,
-    "impact": 72
+    "velocity": <integer 10-100 based on commit count/activity>,
+    "clarity": <integer 10-100 based on code complexity score>,
+    "algorithms": <integer 10-100 based on algorithmic mastery/LeetCode>,
+    "stamina": <integer 10-100 based on repo count and commit consistency>,
+    "impact": <integer 10-100 based on stars, forks, and followers>
   }
 }`
 
@@ -120,6 +120,23 @@ Return ONLY a raw JSON object with zero markdown syntax matching:
           ) {
             if (!parsed.roast) parsed.roast = parsed.roastOrPraise || 'Pushes code at ungodly hours.'
             if (!parsed.praise) parsed.praise = 'Maintains impressive engineering momentum.'
+
+            // Re-calculate auraScore deterministically using 5-metric weighted formula to ensure accuracy
+            if (parsed.radarStats) {
+              const v = Math.min(100, Math.max(10, Number(parsed.radarStats.velocity) || 70))
+              const c = Math.min(100, Math.max(10, Number(parsed.radarStats.clarity) || 70))
+              const a = Math.min(100, Math.max(10, Number(parsed.radarStats.algorithms) || 70))
+              const s = Math.min(100, Math.max(10, Number(parsed.radarStats.stamina) || 70))
+              const i = Math.min(100, Math.max(10, Number(parsed.radarStats.impact) || 70))
+
+              parsed.radarStats = { velocity: v, clarity: c, algorithms: a, stamina: s, impact: i }
+              parsed.auraScore = Math.min(99, Math.max(10, Math.round(v * 0.20 + c * 0.20 + a * 0.20 + s * 0.15 + i * 0.25)))
+            } else if (!parsed.auraScore || parsed.auraScore === 88) {
+              const fallback = generateFallbackSummary(github, leetcode)
+              parsed.radarStats = fallback.radarStats
+              parsed.auraScore = fallback.auraScore
+            }
+
             return parsed
           }
         }
