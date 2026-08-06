@@ -121,7 +121,7 @@ export default function AnalysisResultsPage() {
   return (
     <div className="flex-1 flex flex-col items-center px-4 py-8 space-y-8 bg-black min-h-screen">
       {/* ─── Top Control Action Bar ─── */}
-      <div className="w-full max-w-5xl flex flex-col md:flex-row items-center justify-between gap-4 bg-[#0c0c0e] p-4 px-6 rounded-2xl border border-white/10 shadow-xl">
+      <div className="w-full max-w-5xl flex flex-col md:flex-row items-center justify-between gap-4 bg-[#0c0c0e] p-3.5 px-5 rounded-2xl">
         <Link
           href="/"
           className="flex items-center gap-2 text-xs font-semibold text-gray-400 hover:text-white transition-all shrink-0"
@@ -131,11 +131,11 @@ export default function AnalysisResultsPage() {
         </Link>
 
         {/* View Toggle Tabs */}
-        <div className="flex items-center gap-1 bg-[#16161a] p-1 rounded-xl">
+        <div className="flex items-center gap-1 bg-[#141414] p-1 rounded-xl">
           <button
             onClick={() => setActiveTab('both')}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-              activeTab === 'both' ? 'bg-white text-black shadow' : 'text-gray-400 hover:text-white'
+              activeTab === 'both' ? 'bg-white text-black' : 'text-gray-400 hover:text-white'
             }`}
           >
             Side-by-Side
@@ -143,7 +143,7 @@ export default function AnalysisResultsPage() {
           <button
             onClick={() => setActiveTab('report')}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-              activeTab === 'report' ? 'bg-white text-black shadow' : 'text-gray-400 hover:text-white'
+              activeTab === 'report' ? 'bg-white text-black' : 'text-gray-400 hover:text-white'
             }`}
           >
             <FileText className="w-3.5 h-3.5" />
@@ -152,7 +152,7 @@ export default function AnalysisResultsPage() {
           <button
             onClick={() => setActiveTab('card')}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-              activeTab === 'card' ? 'bg-white text-black shadow' : 'text-gray-400 hover:text-white'
+              activeTab === 'card' ? 'bg-white text-black' : 'text-gray-400 hover:text-white'
             }`}
           >
             <Award className="w-3.5 h-3.5" />
@@ -164,7 +164,7 @@ export default function AnalysisResultsPage() {
         <div className="flex items-center gap-2 flex-wrap justify-center">
           <button
             onClick={handleCopyLink}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-gray-300 bg-[#18181c] hover:bg-[#22222a] transition-all cursor-pointer border border-white/5"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-gray-300 bg-[#141414] hover:bg-[#1f1f1f] transition-all cursor-pointer"
           >
             {copied ? (
               <span className="text-emerald-400 font-bold">Link Copied!</span>
@@ -179,7 +179,7 @@ export default function AnalysisResultsPage() {
           <button
             onClick={handleDownloadFutCard}
             disabled={downloadingFut}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-amber-300 bg-[#251e0f] hover:bg-[#332914] transition-all cursor-pointer disabled:opacity-50 border border-amber-500/30"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-amber-300 bg-[#241d0e] hover:bg-[#332914] transition-all cursor-pointer disabled:opacity-50"
           >
             <Award className="w-3.5 h-3.5 text-amber-400" />
             <span>{downloadingFut ? 'Capturing...' : 'Download Card'}</span>

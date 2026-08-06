@@ -189,9 +189,9 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
               <img
                 src={github.avatarUrl}
                 alt={github.username}
-                className="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover border-2 border-white/20 shadow-xl bg-black/60"
+                className="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover shadow-xl bg-black/60"
               />
-              <span className="absolute bottom-0 right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-black" />
+              <span className="absolute bottom-0 right-1 w-3.5 h-3.5 rounded-full bg-emerald-400" />
             </div>
 
             {/* Developer Handle */}
