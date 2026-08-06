@@ -13,12 +13,9 @@ interface AuraCardProps {
   cardRef?: React.RefObject<HTMLDivElement | null>
 }
 
-function formatCompactNumber(num: number | string): string {
+function formatFullNumber(num: number | string): string {
   if (typeof num === 'string') return num
-  if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`
-  if (num >= 10000) return `${(num / 1000).toFixed(1)}k`
-  if (num >= 1000) return num.toLocaleString()
-  return num.toString()
+  return num.toLocaleString()
 }
 
 export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRef }) => {
@@ -61,7 +58,7 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
   return (
     <div
       ref={cardRef}
-      className="w-full max-w-3xl mx-auto rounded-3xl p-6 md:p-10 bg-[#0a0a0a] text-white space-y-5 font-sans overflow-hidden"
+      className="w-full max-w-3xl mx-auto rounded-3xl p-6 md:p-10 bg-[#0a0a0a] text-white space-y-5 font-sans"
     >
       {/* ─── Profile Header ─── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
@@ -72,11 +69,11 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
             className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl object-cover bg-[#111] shrink-0"
           />
           <div className="min-w-0 flex-1">
-            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-none truncate">
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-none">
               {github.name || github.username}
             </h2>
             <div className="flex items-center gap-2 mt-2 flex-wrap">
-              <span className="text-xs font-black text-gray-400 truncate">@{github.username}</span>
+              <span className="text-xs font-black text-gray-400">@{github.username}</span>
               <span className="text-[10px] px-2.5 py-1 rounded-lg bg-rose-500 text-white font-black shrink-0">
                 {github.topLanguage}
               </span>
@@ -159,7 +156,7 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
         </div>
       </div>
 
-      {/* ─── Stats Grid — colored tiles with formatCompactNumber & text truncation ─── */}
+      {/* ─── Stats Grid — full un-truncated numbers (no '...' ellipsis) ─── */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
         {[
           { label: 'Stars', value: github.totalStars, bg: 'bg-amber-500', text: 'text-black' },
@@ -177,11 +174,11 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
                 { label: 'PRs', value: github.pullRequestCount, bg: 'bg-cyan-500', text: 'text-black' },
               ]),
         ].map((stat) => (
-          <div key={stat.label} className={`p-3 sm:p-3.5 rounded-2xl ${stat.bg} text-center min-w-0 overflow-hidden`}>
-            <div className={`text-base sm:text-lg md:text-xl font-black ${stat.text} truncate px-1`}>
-              {formatCompactNumber(stat.value)}
+          <div key={stat.label} className={`p-3 sm:p-3.5 rounded-2xl ${stat.bg} text-center flex flex-col justify-center`}>
+            <div className={`text-sm sm:text-base md:text-lg font-black ${stat.text} leading-tight px-0.5 break-words`}>
+              {formatFullNumber(stat.value)}
             </div>
-            <div className={`text-[10px] uppercase font-black tracking-wider mt-0.5 ${stat.text} opacity-80 truncate`}>
+            <div className={`text-[10px] uppercase font-black tracking-wider mt-1 ${stat.text} opacity-80`}>
               {stat.label}
             </div>
           </div>
