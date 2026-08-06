@@ -22,7 +22,7 @@ function formatFullNumber(num: number | string): string {
 export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, cardRef }) => {
   const [transform, setTransform] = useState('')
   const [glossPos, setGlossPos] = useState({ x: 50, y: 50, opacity: 0 })
-  const containerRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement | null>(null)
 
   const score = ai.auraScore || 85
   const isGold = score >= 85 || github.totalStars >= 1000
@@ -98,12 +98,14 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
   const displayName = github.name || github.username
 
   return (
-    <div
-      ref={cardRef}
-      className="relative w-[320px] sm:w-[340px] mx-auto select-none transition-transform duration-200 ease-out py-2 font-sans"
-    >
+    <div className="relative w-[320px] sm:w-[340px] mx-auto select-none transition-transform duration-200 ease-out py-1 font-sans">
       <div
-        ref={containerRef}
+        ref={(node) => {
+          containerRef.current = node
+          if (cardRef) {
+            (cardRef as React.MutableRefObject<HTMLDivElement | null>).current = node
+          }
+        }}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{
@@ -156,6 +158,7 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
               <img
                 src={github.avatarUrl}
                 alt={github.username}
+                crossOrigin="anonymous"
                 className={`w-20 h-20 sm:w-22 sm:h-22 rounded-2xl object-cover bg-black ring-2 ${theme.ringColor} shadow-xl`}
               />
               <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-400 ring-4 ring-[#0c0c0e]" />
