@@ -14,15 +14,6 @@ interface AuraCardProps {
   cardRef?: React.RefObject<HTMLDivElement | null>
 }
 
-// 100% Solid Vibrant Pop-Color Observations
-const VIBRANT_OBS_CARDS = [
-  'bg-rose-500 text-white',
-  'bg-emerald-500 text-white',
-  'bg-cyan-400 text-black font-semibold',
-  'bg-amber-400 text-black font-semibold',
-  'bg-fuchsia-500 text-white',
-]
-
 export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRef }) => {
   const radar = ai.radarStats || {
     velocity: 80,
@@ -32,316 +23,200 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
     impact: 70,
   }
 
-  // Playful Tier Grade based on Aura Score
   let tierGrade = 'A-TIER'
-  let tierBadgeBg = 'bg-rose-500 text-white font-black'
+  let tierColor = 'text-rose-400'
 
   if (ai.auraScore >= 92) {
-    tierGrade = 'S-TIER GOD'
-    tierBadgeBg = 'bg-yellow-400 text-black font-black'
+    tierGrade = 'S-TIER'
+    tierColor = 'text-yellow-400'
   } else if (ai.auraScore >= 84) {
-    tierGrade = 'S-TIER DEV'
-    tierBadgeBg = 'bg-rose-500 text-white font-black'
+    tierGrade = 'S-TIER'
+    tierColor = 'text-rose-400'
   } else if (ai.auraScore >= 75) {
-    tierGrade = 'A-TIER PRO'
-    tierBadgeBg = 'bg-cyan-400 text-black font-black'
+    tierGrade = 'A-TIER'
+    tierColor = 'text-cyan-400'
   } else {
-    tierGrade = 'B-TIER CRAFTSMAN'
-    tierBadgeBg = 'bg-emerald-400 text-black font-black'
+    tierGrade = 'B-TIER'
+    tierColor = 'text-emerald-400'
   }
 
   const roastText = ai.roast || ai.roastOrPraise || 'Consistently pushing code at ungodly hours.'
   const praiseText = ai.praise || 'Maintains incredible build momentum across open source projects.'
 
+  const ratingBars = [
+    { label: 'Velocity', value: radar.velocity, color: 'bg-rose-500' },
+    { label: 'Clarity', value: radar.clarity, color: 'bg-emerald-500' },
+    { label: 'Algorithms', value: radar.algorithms, color: 'bg-amber-400' },
+    { label: 'Stamina', value: radar.stamina, color: 'bg-fuchsia-500' },
+    { label: 'Impact', value: radar.impact, color: 'bg-cyan-400' },
+  ]
+
   return (
     <div
       ref={cardRef}
-      className="w-full max-w-3xl mx-auto rounded-3xl p-6 md:p-10 bg-black text-white space-y-8 font-sans"
+      className="w-full max-w-3xl mx-auto rounded-3xl p-6 md:p-10 bg-black text-white space-y-6 font-sans"
     >
-      {/* Profile Header Box - Solid Vibrant Navy */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-8 rounded-3xl bg-blue-600 text-white shadow-2xl">
-        <div className="flex items-center gap-4 sm:gap-5">
-          <div className="relative">
-            <img
-              src={github.avatarUrl}
-              alt={github.username}
-              className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover bg-black border-2 border-white/20 shadow-md"
-            />
-            <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-400 border-2 border-blue-600" />
-          </div>
+      {/* ─── Profile Header ─── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 pb-6 border-b border-[#1a1a1a]">
+        <div className="flex items-center gap-4">
+          <img
+            src={github.avatarUrl}
+            alt={github.username}
+            className="w-16 h-16 rounded-2xl object-cover bg-[#111]"
+          />
           <div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-                {github.name || github.username}
-              </h2>
-              <span className="text-xs font-black px-2.5 py-1 rounded-lg bg-black text-yellow-300">
-                @{github.username}
+            <h2 className="text-2xl font-black text-white tracking-tight">
+              {github.name || github.username}
+            </h2>
+            <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+              <span className="text-xs font-semibold text-gray-400">@{github.username}</span>
+              <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#1a1a1a] text-rose-400 font-bold">
+                {github.topLanguage}
               </span>
-            </div>
-            <div className="flex items-center gap-2 mt-2.5 flex-wrap">
-              {/* Vibrant Solid Badges */}
-              <span className="px-3 py-1 rounded-xl text-xs font-black bg-rose-500 text-white flex items-center gap-1">
-                <Code2 className="w-3.5 h-3.5" />
-                <span>{github.topLanguage}</span>
+              <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#1a1a1a] text-gray-300 font-semibold">
+                {github.timeSlot}
               </span>
-              <span className="px-3 py-1 rounded-xl text-xs font-black bg-cyan-400 text-black flex items-center gap-1">
-                <Zap className="w-3.5 h-3.5" />
-                <span>{github.timeSlot}</span>
-              </span>
-              {leetcode && (
-                <span className="px-3 py-1 rounded-xl text-xs font-black bg-amber-400 text-black flex items-center gap-1">
-                  <Award className="w-3.5 h-3.5" />
-                  <span>{leetcode.totalSolved} Solved</span>
-                </span>
-              )}
             </div>
           </div>
         </div>
 
-        {/* Aura Rating Badge */}
-        <div className="flex items-center gap-4 bg-black px-6 py-4 rounded-2xl self-start sm:self-auto shadow-inner">
-          <div className="flex flex-col items-end">
-            <span className="text-[10px] text-gray-300 uppercase tracking-widest font-extrabold flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-yellow-300" />
-              <span>Aura Score</span>
-            </span>
-            <span className={`text-[10px] px-2.5 py-0.5 rounded-md mt-1 ${tierBadgeBg}`}>
-              {tierGrade}
-            </span>
+        <div className="flex items-center gap-3 self-start sm:self-auto">
+          <div className="text-right">
+            <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold block">Aura</span>
+            <span className={`text-[10px] ${tierColor} font-black`}>{tierGrade}</span>
           </div>
           <span className="text-4xl font-black text-white">{ai.auraScore}</span>
         </div>
       </div>
 
-      {/* Archetype & Tagline - Solid Vibrant Fuchsia Box */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-fuchsia-600 text-white space-y-2.5 shadow-lg">
-        <div className="flex items-center justify-between text-[11px] font-black uppercase tracking-widest text-fuchsia-200">
-          <span className="flex items-center gap-1.5">
-            <Terminal className="w-3.5 h-3.5" />
-            <span>AI Archetype</span>
-          </span>
-          <span className="px-2.5 py-0.5 rounded-md bg-black text-white text-[10px]">VERIFIED</span>
+      {/* ─── Archetype ─── */}
+      <div className="space-y-1">
+        <div className="flex items-center gap-1.5">
+          <Terminal className="w-3.5 h-3.5 text-gray-500" />
+          <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Archetype</span>
         </div>
-        <h3 className="text-2xl sm:text-3xl font-black text-white leading-tight">
-          "{ai.archetype}"
+        <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+          {ai.archetype}
         </h3>
-        <p className="text-sm text-fuchsia-100 font-medium italic pt-1">"{ai.tagline}"</p>
+        <p className="text-sm text-gray-400 italic">{ai.tagline}</p>
       </div>
 
-      {/* DEDICATED VIBRANT SOLID ROAST & PRAISE BOXES */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
-        {/* 🔥 THE ROAST - SOLID VIBRANT ROSE */}
-        <div className="p-6 rounded-3xl bg-rose-600 text-white space-y-3 shadow-lg">
-          <div className="flex items-center gap-2">
-            <Flame className="w-4 h-4 text-rose-200" />
-            <span className="text-[11px] text-rose-200 font-black uppercase tracking-widest">
-              The Roast
-            </span>
+      {/* ─── Roast & Praise ─── */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="p-5 rounded-2xl bg-[#111] space-y-2">
+          <div className="flex items-center gap-1.5">
+            <Flame className="w-3.5 h-3.5 text-rose-500" />
+            <span className="text-[10px] text-rose-500 font-bold uppercase tracking-widest">The Roast</span>
           </div>
-          <p className="text-sm font-bold leading-relaxed italic text-white">
+          <p className="text-sm text-gray-200 leading-relaxed italic">
             "{roastText}"
           </p>
         </div>
 
-        {/* 👑 THE PRAISE - SOLID VIBRANT EMERALD */}
-        <div className="p-6 rounded-3xl bg-emerald-600 text-white space-y-3 shadow-lg">
-          <div className="flex items-center gap-2">
-            <Crown className="w-4 h-4 text-emerald-200" />
-            <span className="text-[11px] text-emerald-200 font-black uppercase tracking-widest">
-              The Praise
-            </span>
+        <div className="p-5 rounded-2xl bg-[#111] space-y-2">
+          <div className="flex items-center gap-1.5">
+            <Crown className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest">The Praise</span>
           </div>
-          <p className="text-sm font-bold leading-relaxed italic text-white">
+          <p className="text-sm text-gray-200 leading-relaxed italic">
             "{praiseText}"
           </p>
         </div>
       </div>
 
-      {/* 5-Axis Skill Ratings - SOLID VIBRANT PURPLE CONTAINER */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-purple-600 text-white space-y-5 shadow-xl">
-        <div className="flex items-center justify-between text-xs font-black uppercase tracking-widest text-purple-200">
-          <span>Performance Ratings</span>
-          <span className="px-3 py-1 rounded-xl bg-black text-yellow-300 font-black">
+      {/* ─── Performance Ratings ─── */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Performance</span>
+          <span className="text-[10px] text-gray-500 font-semibold">
             Complexity: {github.codeComplexityScore}/100
           </span>
         </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-5 gap-3.5">
-          {/* Velocity */}
-          <div className="p-4 rounded-2xl bg-fuchsia-500 text-white space-y-2">
-            <div className="flex justify-between text-xs font-black">
-              <span>Velocity</span>
-              <span>{radar.velocity}%</span>
-            </div>
-            <div className="w-full h-2.5 bg-black/40 rounded-full overflow-hidden">
-              <div className="h-full bg-white rounded-full transition-all" style={{ width: `${radar.velocity}%` }} />
-            </div>
-          </div>
-
-          {/* Clarity */}
-          <div className="p-4 rounded-2xl bg-emerald-500 text-white space-y-2">
-            <div className="flex justify-between text-xs font-black">
-              <span>Clarity</span>
-              <span>{radar.clarity}%</span>
-            </div>
-            <div className="w-full h-2.5 bg-black/40 rounded-full overflow-hidden">
-              <div className="h-full bg-white rounded-full transition-all" style={{ width: `${radar.clarity}%` }} />
-            </div>
-          </div>
-
-          {/* Algorithms */}
-          <div className="p-4 rounded-2xl bg-amber-400 text-black space-y-2 font-black">
-            <div className="flex justify-between text-xs font-black">
-              <span>Algo</span>
-              <span>{radar.algorithms}%</span>
-            </div>
-            <div className="w-full h-2.5 bg-black/30 rounded-full overflow-hidden">
-              <div className="h-full bg-black rounded-full transition-all" style={{ width: `${radar.algorithms}%` }} />
-            </div>
-          </div>
-
-          {/* Stamina */}
-          <div className="p-4 rounded-2xl bg-rose-500 text-white space-y-2">
-            <div className="flex justify-between text-xs font-black">
-              <span>Stamina</span>
-              <span>{radar.stamina}%</span>
-            </div>
-            <div className="w-full h-2.5 bg-black/40 rounded-full overflow-hidden">
-              <div className="h-full bg-white rounded-full transition-all" style={{ width: `${radar.stamina}%` }} />
-            </div>
-          </div>
-
-          {/* Impact */}
-          <div className="p-4 rounded-2xl bg-cyan-400 text-black space-y-2 font-black">
-            <div className="flex justify-between text-xs font-black">
-              <span>Impact</span>
-              <span>{radar.impact}%</span>
-            </div>
-            <div className="w-full h-2.5 bg-black/30 rounded-full overflow-hidden">
-              <div className="h-full bg-black rounded-full transition-all" style={{ width: `${radar.impact}%` }} />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* GitHub & LeetCode Key Stats Grid - SOLID VIBRANT CONTAINERS */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-        {/* GitHub Stats - SOLID BLUE */}
-        <div className="p-6 rounded-3xl bg-blue-600 text-white space-y-4 shadow-lg">
-          <div className="flex items-center justify-between text-xs font-black uppercase tracking-widest text-blue-200">
-            <span>GitHub Metrics</span>
-            <span className="px-2.5 py-0.5 rounded-md bg-black text-yellow-300 font-black">
-              {github.originalityRatio}% Original
-            </span>
-          </div>
-
-          <div className="grid grid-cols-3 gap-2.5 text-center">
-            <div className="p-3.5 rounded-2xl bg-amber-400 text-black font-black shadow">
-              <div className="text-xl font-black">{github.totalStars}</div>
-              <div className="text-[10px] uppercase font-black tracking-wider">Stars</div>
-            </div>
-            <div className="p-3.5 rounded-2xl bg-cyan-400 text-black font-black shadow">
-              <div className="text-xl font-black">{github.publicRepos}</div>
-              <div className="text-[10px] uppercase font-black tracking-wider">Repos</div>
-            </div>
-            <div className="p-3.5 rounded-2xl bg-rose-500 text-white font-black shadow">
-              <div className="text-xl font-black">{github.followers}</div>
-              <div className="text-[10px] uppercase font-black tracking-wider">Followers</div>
-            </div>
-          </div>
-
-          <div className="flex justify-between text-xs font-bold pt-1 text-blue-100">
-            <span>Primary Language</span>
-            <span className="text-yellow-300 font-black">{github.topLanguage}</span>
-          </div>
-        </div>
-
-        {/* LeetCode Stats - SOLID INDIGO */}
-        <div className="p-6 rounded-3xl bg-indigo-600 text-white space-y-4 shadow-lg">
-          <div className="flex items-center justify-between text-xs font-black uppercase tracking-widest text-indigo-200">
-            <span>LeetCode Stats</span>
-            {leetcode && (
-              <span className="px-2.5 py-0.5 rounded-md bg-black text-yellow-300 font-black">
-                {leetcode.acceptanceRate}% Accuracy
-              </span>
-            )}
-          </div>
-
-          {leetcode ? (
-            <>
-              <div className="grid grid-cols-3 gap-2.5 text-center">
-                <div className="p-3.5 rounded-2xl bg-emerald-400 text-black font-black shadow">
-                  <div className="text-xl font-black">{leetcode.easySolved}</div>
-                  <div className="text-[10px] uppercase font-black tracking-wider">Easy</div>
-                </div>
-                <div className="p-3.5 rounded-2xl bg-amber-400 text-black font-black shadow">
-                  <div className="text-xl font-black">{leetcode.mediumSolved}</div>
-                  <div className="text-[10px] uppercase font-black tracking-wider">Medium</div>
-                </div>
-                <div className="p-3.5 rounded-2xl bg-rose-500 text-white font-black shadow">
-                  <div className="text-xl font-black">{leetcode.hardSolved}</div>
-                  <div className="text-[10px] uppercase font-black tracking-wider">Hard</div>
-                </div>
+        <div className="space-y-3">
+          {ratingBars.map((bar) => (
+            <div key={bar.label} className="flex items-center gap-4">
+              <span className="text-xs text-gray-400 font-semibold w-20 shrink-0">{bar.label}</span>
+              <div className="flex-1 h-2 bg-[#1a1a1a] rounded-full overflow-hidden">
+                <div
+                  className={`h-full ${bar.color} rounded-full`}
+                  style={{ width: `${bar.value}%` }}
+                />
               </div>
-              <div className="flex justify-between text-xs font-bold pt-1 text-indigo-100">
-                <span>Algo Rating</span>
-                <span className="text-yellow-300 font-black">{leetcode.algoMasteryScore}/100</span>
-              </div>
-            </>
-          ) : (
-            <div className="py-6 text-center text-xs font-bold text-indigo-200">
-              No LeetCode profile linked.
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Playful Vibrant Solid Cards: PR Nemesis & Stack */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-        <div className="p-6 rounded-3xl bg-rose-600 text-white space-y-1.5 shadow-lg">
-          <span className="text-[10px] text-rose-200 uppercase font-black tracking-wider flex items-center gap-1">
-            <ShieldAlert className="w-3.5 h-3.5 text-rose-200" />
-            <span>PR Nemesis</span>
-          </span>
-          <p className="text-xs sm:text-sm font-bold leading-relaxed">{ai.devNemesis}</p>
-        </div>
-
-        <div className="p-6 rounded-3xl bg-cyan-500 text-black space-y-1.5 shadow-lg">
-          <span className="text-[10px] text-black/70 uppercase font-black tracking-wider flex items-center gap-1">
-            <Terminal className="w-3.5 h-3.5 text-black/70" />
-            <span>Ideal Tech Stack</span>
-          </span>
-          <p className="text-xs sm:text-sm font-bold leading-relaxed">{ai.recommendedStack}</p>
-        </div>
-      </div>
-
-      {/* Key Observation Cards - SOLID VIBRANT PURPLE CONTAINER */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-purple-600 text-white space-y-4 shadow-xl">
-        <span className="text-[11px] text-purple-200 uppercase font-black tracking-widest block">
-          Key Observations
-        </span>
-        <div className="space-y-3.5">
-          {ai.observations.map((obs, idx) => (
-            <div
-              key={idx}
-              className={`p-5 rounded-2xl text-xs sm:text-sm flex items-start gap-4 leading-relaxed shadow ${
-                VIBRANT_OBS_CARDS[idx % VIBRANT_OBS_CARDS.length]
-              }`}
-            >
-              <span className="w-7 h-7 rounded-xl bg-black text-white font-black flex items-center justify-center text-xs shrink-0">
-                0{idx + 1}
-              </span>
-              <span className="pt-0.5 font-bold">{obs}</span>
+              <span className="text-xs text-white font-bold w-9 text-right">{bar.value}%</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Clean Brand Watermark */}
-      <div className="pt-4 flex items-center justify-between text-[11px] text-gray-500">
+      {/* ─── Stats Grid ─── */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+        {[
+          { label: 'Stars', value: github.totalStars, color: 'text-amber-400' },
+          { label: 'Repos', value: github.publicRepos, color: 'text-cyan-400' },
+          { label: 'Followers', value: github.followers, color: 'text-rose-400' },
+          ...(leetcode
+            ? [
+                { label: 'Easy', value: leetcode.easySolved, color: 'text-emerald-400' },
+                { label: 'Medium', value: leetcode.mediumSolved, color: 'text-amber-400' },
+                { label: 'Hard', value: leetcode.hardSolved, color: 'text-rose-400' },
+              ]
+            : [
+                { label: 'Original', value: `${github.originalityRatio}%`, color: 'text-emerald-400' },
+                { label: 'Commits', value: github.recentCommitCount, color: 'text-fuchsia-400' },
+                { label: 'PRs', value: github.pullRequestCount, color: 'text-cyan-400' },
+              ]),
+        ].map((stat) => (
+          <div key={stat.label} className="p-3.5 rounded-2xl bg-[#111] text-center">
+            <div className={`text-lg font-black ${stat.color}`}>{stat.value}</div>
+            <div className="text-[10px] text-gray-500 uppercase font-bold tracking-wider mt-0.5">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* ─── Nemesis & Stack ─── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="p-5 rounded-2xl bg-[#111] space-y-1.5">
+          <div className="flex items-center gap-1.5">
+            <ShieldAlert className="w-3.5 h-3.5 text-rose-500" />
+            <span className="text-[10px] text-rose-500 uppercase font-bold tracking-widest">PR Nemesis</span>
+          </div>
+          <p className="text-xs sm:text-sm text-gray-200 font-medium leading-relaxed">{ai.devNemesis}</p>
+        </div>
+
+        <div className="p-5 rounded-2xl bg-[#111] space-y-1.5">
+          <div className="flex items-center gap-1.5">
+            <Code2 className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="text-[10px] text-cyan-400 uppercase font-bold tracking-widest">Ideal Stack</span>
+          </div>
+          <p className="text-xs sm:text-sm text-gray-200 font-medium leading-relaxed">{ai.recommendedStack}</p>
+        </div>
+      </div>
+
+      {/* ─── Key Observations ─── */}
+      <div className="space-y-3">
+        <span className="text-[10px] text-gray-500 uppercase font-bold tracking-widest block">
+          Key Observations
+        </span>
+        <div className="space-y-2">
+          {ai.observations.map((obs, idx) => (
+            <div
+              key={idx}
+              className="p-4 rounded-2xl bg-[#111] text-sm text-gray-200 flex items-start gap-3 leading-relaxed"
+            >
+              <span className="w-6 h-6 rounded-lg bg-[#222] text-white font-bold flex items-center justify-center text-[10px] shrink-0">
+                {idx + 1}
+              </span>
+              <span>{obs}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ─── Watermark ─── */}
+      <div className="pt-4 flex items-center justify-between text-[11px] text-gray-600 border-t border-[#1a1a1a]">
         <div className="flex items-center gap-2">
           <CodeAuraLogo className="w-4 h-4" />
-          <span className="font-bold text-white">CodeAura</span>
+          <span className="font-bold text-gray-400">CodeAura</span>
         </div>
         <span>code-aura-app.vercel.app</span>
       </div>
