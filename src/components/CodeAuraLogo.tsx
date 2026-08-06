@@ -3,10 +3,11 @@ import React from 'react'
 export function CodeAuraLogo({ className = 'w-6 h-6' }: { className?: string }) {
   return (
     <svg
-      viewBox="80 120 352 264"
+      viewBox="88 116 336 260"
       className={className}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      style={{ display: 'block' }}
     >
       {/* Sleek Laptop Screen */}
       <rect
