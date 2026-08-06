@@ -182,22 +182,22 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
             <p className="text-xs sm:text-sm font-black text-white leading-tight px-1">&ldquo;{ai.archetype}&rdquo;</p>
           </div>
 
-          {/* ── Bottom Grid: 6 Telemetry Stats (2x3) ── */}
+          {/* ── Bottom Grid: 6 Telemetry Stats (2x3 stacked layout) ── */}
           <div className="grid grid-cols-2 gap-2 mt-3 relative z-10">
             {realStats.map((s) => {
               const IconComp = s.icon
               return (
                 <div
                   key={s.label}
-                  className="p-2.5 rounded-xl bg-[#15151a] flex items-center justify-between"
+                  className="p-2.5 px-3 rounded-xl bg-[#15151a] flex flex-col justify-between"
                 >
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1 min-w-0">
                     <IconComp className={`w-3.5 h-3.5 ${s.color} shrink-0`} />
-                    <span className="text-[10px] font-extrabold text-gray-400 tracking-wider">
+                    <span className="text-[9px] font-extrabold text-gray-400 tracking-wider uppercase">
                       {s.label}
                     </span>
                   </div>
-                  <span className="text-xs font-black text-white text-right ml-1">
+                  <span className="text-sm font-black text-white leading-tight mt-1 tracking-tight">
                     {s.val}
                   </span>
                 </div>

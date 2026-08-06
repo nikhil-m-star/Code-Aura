@@ -67,7 +67,11 @@ export default function AnalysisResultsPage() {
     if (!reportCardRef.current) return
     setDownloadingReport(true)
     try {
-      const dataUrl = await toPng(reportCardRef.current, { cacheBust: true, quality: 0.95 })
+      const dataUrl = await toPng(reportCardRef.current, {
+        cacheBust: true,
+        quality: 1.0,
+        pixelRatio: 3,
+      })
       const link = document.createElement('a')
       link.download = `CodeAura-Report-${analysis?.githubUsername || 'Dev'}.png`
       link.href = dataUrl
@@ -83,13 +87,20 @@ export default function AnalysisResultsPage() {
     if (!futCardRef.current) return
     setDownloadingFut(true)
     try {
-      const dataUrl = await toPng(futCardRef.current, { cacheBust: true, quality: 0.95 })
+      const dataUrl = await toPng(futCardRef.current, {
+        cacheBust: true,
+        quality: 1.0,
+        pixelRatio: 3,
+        style: {
+          transform: 'none',
+        },
+      })
       const link = document.createElement('a')
-      link.download = `CodeAura-ScoutingCard-${analysis?.githubUsername || 'Dev'}.png`
+      link.download = `CodeAura-DeveloperCard-${analysis?.githubUsername || 'Dev'}.png`
       link.href = dataUrl
       link.click()
     } catch (err) {
-      console.error('Failed to capture FUT card image:', err)
+      console.error('Failed to capture developer card image:', err)
     } finally {
       setDownloadingFut(false)
     }
