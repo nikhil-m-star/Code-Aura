@@ -13,8 +13,10 @@ interface AuraCardProps {
   cardRef?: React.RefObject<HTMLDivElement | null>
 }
 
-function formatFullNumber(num: number | string): string {
+function formatReportNumber(num: number | string): string {
   if (typeof num === 'string') return num
+  if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`
+  if (num >= 10000) return `${(num / 1000).toFixed(1)}k`
   return num.toLocaleString()
 }
 
@@ -156,7 +158,7 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
         </div>
       </div>
 
-      {/* ─── Stats Grid — full un-truncated numbers (no '...' ellipsis) ─── */}
+      {/* ─── Stats Grid — clean single-line numbers ─── */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
         {[
           { label: 'Stars', value: github.totalStars, bg: 'bg-amber-500', text: 'text-black' },
@@ -174,11 +176,11 @@ export const AuraCard: React.FC<AuraCardProps> = ({ github, leetcode, ai, cardRe
                 { label: 'PRs', value: github.pullRequestCount, bg: 'bg-cyan-500', text: 'text-black' },
               ]),
         ].map((stat) => (
-          <div key={stat.label} className={`p-3 sm:p-3.5 rounded-2xl ${stat.bg} text-center flex flex-col justify-center`}>
-            <div className={`text-sm sm:text-base md:text-lg font-black ${stat.text} leading-tight px-0.5 break-words`}>
-              {formatFullNumber(stat.value)}
+          <div key={stat.label} className={`p-3.5 rounded-2xl ${stat.bg} text-center flex flex-col items-center justify-center`}>
+            <div className={`text-base sm:text-lg md:text-xl font-black ${stat.text} leading-none whitespace-nowrap`}>
+              {formatReportNumber(stat.value)}
             </div>
-            <div className={`text-[10px] uppercase font-black tracking-wider mt-1 ${stat.text} opacity-80`}>
+            <div className={`text-[10px] uppercase font-black tracking-wider mt-1.5 ${stat.text} opacity-80 whitespace-nowrap`}>
               {stat.label}
             </div>
           </div>
