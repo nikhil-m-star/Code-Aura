@@ -13,6 +13,14 @@ interface AuraFutCardProps {
   cardRef?: React.RefObject<HTMLDivElement | null>
 }
 
+function formatCompactNumber(num: number | string): string {
+  if (typeof num === 'string') return num
+  if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`
+  if (num >= 10000) return `${(num / 1000).toFixed(1)}k`
+  if (num >= 1000) return num.toLocaleString()
+  return num.toString()
+}
+
 export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, cardRef }) => {
   const [transform, setTransform] = useState('')
   const [glossPos, setGlossPos] = useState({ x: 50, y: 50, opacity: 0 })
@@ -49,43 +57,37 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
   // Tier Colors
   const theme = isGold
     ? {
-        gradient: 'from-[#3a2d0c] via-[#241c07] to-[#120e03]',
         stroke: '#fce085',
         fill: 'url(#grad-gold)',
         text: 'text-[#fce085]',
         label: 'text-[#d4af37]',
         subtext: 'text-[#fef3c7]',
-        badgeBg: 'bg-[#d4af37]/20 text-[#fce085] border-[#d4af37]/40',
         tierLabel: 'GOLD TIER',
       }
     : isSilver
     ? {
-        gradient: 'from-[#242933] via-[#161a22] to-[#0a0c10]',
         stroke: '#e2e8f0',
         fill: 'url(#grad-silver)',
         text: 'text-[#f1f5f9]',
         label: 'text-[#94a3b8]',
         subtext: 'text-[#f8fafc]',
-        badgeBg: 'bg-[#94a3b8]/20 text-[#f1f5f9] border-[#94a3b8]/40',
         tierLabel: 'SILVER TIER',
       }
     : {
-        gradient: 'from-[#331d12] via-[#1f110a] to-[#0d0704]',
         stroke: '#f59e0b',
         fill: 'url(#grad-bronze)',
         text: 'text-[#fef3c7]',
         label: 'text-[#d97706]',
         subtext: 'text-[#fffbeb]',
-        badgeBg: 'bg-[#b45309]/20 text-[#fef3c7] border-[#b45309]/40',
         tierLabel: 'BRONZE TIER',
       }
 
-  // Real Developer Stats
+  // Real Developer Stats with compact formatting
   const realStats = [
-    { label: 'STARS', val: github.totalStars },
-    { label: 'REPOS', val: github.publicRepos },
-    { label: 'SOLVED', val: leetcode ? leetcode.totalSolved : 'N/A' },
-    { label: 'COMMITS', val: github.recentCommitCount },
+    { label: 'STARS', val: formatCompactNumber(github.totalStars) },
+    { label: 'REPOS', val: formatCompactNumber(github.publicRepos) },
+    { label: 'SOLVED', val: formatCompactNumber(leetcode ? leetcode.totalSolved : 'N/A') },
+    { label: 'COMMITS', val: formatCompactNumber(github.recentCommitCount) },
     { label: 'COMPLEXITY', val: `${github.codeComplexityScore}/100` },
     { label: 'MAIN LANG', val: github.topLanguage },
   ]
@@ -202,17 +204,17 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
           </div>
 
           {/* ── Bottom Section: Real Developer Metrics ── */}
-          <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 px-2 font-mono text-xs sm:text-sm">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 px-2 font-mono text-xs sm:text-sm overflow-hidden">
             {realStats.map((s) => (
-              <div key={s.label} className="flex items-center justify-between">
-                <span className={`text-[10px] font-bold ${theme.label}`}>{s.label}</span>
-                <span className={`font-black ${theme.subtext} truncate max-w-[80px] text-right`}>{s.val}</span>
+              <div key={s.label} className="flex items-center justify-between min-w-0">
+                <span className={`text-[10px] font-bold ${theme.label} shrink-0 mr-1`}>{s.label}</span>
+                <span className={`font-black ${theme.subtext} truncate text-right`}>{s.val}</span>
               </div>
             ))}
           </div>
 
           {/* Archetype Footer */}
-          <div className="pb-2 text-center">
+          <div className="pb-2 text-center overflow-hidden">
             <span className={`text-[10px] font-mono font-extrabold ${theme.label} tracking-widest uppercase block truncate px-2`}>
               {ai.archetype}
             </span>
