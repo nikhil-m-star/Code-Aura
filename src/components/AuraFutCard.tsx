@@ -27,8 +27,8 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
   const containerRef = useRef<HTMLDivElement>(null)
 
   const score = ai.auraScore || 85
-  const isGold = score >= 90
-  const isSilver = score >= 80 && score < 90
+  const isGold = score >= 85 || github.totalStars >= 1000
+  const isSilver = score >= 70 && !isGold
 
   // Handle 3D Tilt on Mouse Move
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -46,7 +46,7 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
     const glossY = (y / rect.height) * 100
 
     setTransform(`perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.03, 1.03, 1.03)`)
-    setGlossPos({ x: glossX, y: glossY, opacity: 0.25 })
+    setGlossPos({ x: glossX, y: glossY, opacity: 0.3 })
   }
 
   const handleMouseLeave = () => {
@@ -54,7 +54,7 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
     setGlossPos({ x: 50, y: 50, opacity: 0 })
   }
 
-  // Tier Colors
+  // Tier Theme Config
   const theme = isGold
     ? {
         stroke: '#fce085',
@@ -108,26 +108,31 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
       >
         {/* SVG Shield Background Shape & Trims */}
         <svg
-          className="absolute inset-0 w-full h-full drop-shadow-[0_20px_35px_rgba(0,0,0,0.8)]"
+          className="absolute inset-0 w-full h-full drop-shadow-[0_20px_35px_rgba(0,0,0,0.85)]"
           viewBox="0 0 248 372"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
           <defs>
-            <linearGradient id="grad-gold" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#2e240c" />
-              <stop offset="50%" stopColor="#1a1406" />
-              <stop offset="100%" stopColor="#0d0a03" />
+            <linearGradient id="grad-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#47370d" />
+              <stop offset="35%" stopColor="#2e2308" />
+              <stop offset="70%" stopColor="#1a1304" />
+              <stop offset="100%" stopColor="#0d0a02" />
             </linearGradient>
-            <linearGradient id="grad-silver" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#1e232a" />
-              <stop offset="50%" stopColor="#12151a" />
-              <stop offset="100%" stopColor="#090b0e" />
+
+            <linearGradient id="grad-silver" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#2c3340" />
+              <stop offset="35%" stopColor="#1b2028" />
+              <stop offset="70%" stopColor="#111419" />
+              <stop offset="100%" stopColor="#080a0d" />
             </linearGradient>
-            <linearGradient id="grad-bronze" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#251710" />
-              <stop offset="50%" stopColor="#170e0a" />
-              <stop offset="100%" stopColor="#0a0604" />
+
+            <linearGradient id="grad-bronze" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#3d2215" />
+              <stop offset="35%" stopColor="#26150d" />
+              <stop offset="70%" stopColor="#170c07" />
+              <stop offset="100%" stopColor="#0a0503" />
             </linearGradient>
           </defs>
 
@@ -154,7 +159,7 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
         <div
           className="absolute inset-0 pointer-events-none rounded-[36px] transition-opacity duration-300 z-30"
           style={{
-            background: `radial-gradient(circle at ${glossPos.x}% ${glossPos.y}%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%)`,
+            background: `radial-gradient(circle at ${glossPos.x}% ${glossPos.y}%, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 65%)`,
             opacity: glossPos.opacity,
           }}
         />

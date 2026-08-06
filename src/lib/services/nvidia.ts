@@ -205,24 +205,25 @@ function generateFallbackSummary(
   // Clarity: directly from code complexity score, no inflated floor
   const clarity = Math.min(100, Math.max(20, github.codeComplexityScore))
 
-  // Algorithms: LeetCode-based or low default for non-LC users
+  // Algorithms: LeetCode-based, or inferred from code complexity & open-source impact if LC not linked
+  const inferredAlgo = Math.min(95, Math.max(35, Math.round(github.codeComplexityScore * 0.7 + Math.min(30, Math.log10(github.totalStars + 1) * 10))))
   const algorithms = leetcode
     ? Math.min(100, Math.max(15, leetcode.algoMasteryScore))
-    : Math.min(40, 15 + github.publicRepos)
+    : inferredAlgo
 
   // Stamina: consistency signal from repo count + commit activity
   const repoSignal = Math.min(40, github.publicRepos * 2)
   const prSignal = Math.min(30, (github.pullRequestCount || 0) * 3)
   const stamina = Math.min(100, Math.max(10, repoSignal + prSignal + (commitCount > 10 ? 20 : commitCount > 3 ? 10 : 0)))
 
-  // Impact: logarithmic scaling for stars and followers — 1000 stars ≈ 85, not 100
-  const starScore = github.totalStars > 0 ? Math.min(50, Math.round(Math.log10(github.totalStars + 1) * 18)) : 0
+  // Impact: logarithmic scaling for stars and followers — 500+ stars gives high impact score
+  const starScore = github.totalStars > 0 ? Math.min(55, Math.round(Math.log10(github.totalStars + 1) * 20)) : 0
   const followerScore = github.followers > 0 ? Math.min(30, Math.round(Math.log10(github.followers + 1) * 12)) : 0
-  const originalityBonus = Math.round(github.originalityRatio * 0.2)
+  const originalityBonus = Math.round(github.originalityRatio * 0.15)
   const impact = Math.min(100, Math.max(5, starScore + followerScore + originalityBonus))
 
-  // Composite aura: weighted average (impact and algorithms matter more)
-  const rawAura = (velocity * 0.2) + (clarity * 0.15) + (algorithms * 0.25) + (stamina * 0.15) + (impact * 0.25)
+  // Composite aura: weighted average
+  const rawAura = (velocity * 0.2) + (clarity * 0.2) + (algorithms * 0.2) + (stamina * 0.15) + (impact * 0.25)
   const auraScore = Math.min(99, Math.max(10, Math.round(rawAura)))
 
   return {
