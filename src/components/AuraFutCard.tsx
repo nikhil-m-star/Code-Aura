@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useRef } from 'react'
 import { GitHubUserStats } from '@/lib/services/github'
 import { LeetCodeUserStats } from '@/lib/services/leetcode'
 import { AISummary } from '@/lib/services/nvidia'
@@ -14,69 +14,80 @@ interface AuraFutCardProps {
 }
 
 export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, cardRef }) => {
-  const radar = ai.radarStats || {
-    velocity: 80,
-    clarity: 85,
-    algorithms: leetcode ? 75 : 55,
-    stamina: 88,
-    impact: 70,
-  }
+  const [transform, setTransform] = useState('')
+  const [glossPos, setGlossPos] = useState({ x: 50, y: 50, opacity: 0 })
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const score = ai.auraScore || 85
   const isGold = score >= 90
   const isSilver = score >= 80 && score < 90
 
-  // Tier Theme Styling
+  // Handle 3D Tilt on Mouse Move
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return
+    const rect = containerRef.current.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    const centerX = rect.width / 2
+    const centerY = rect.height / 2
+
+    const rotateX = ((y - centerY) / centerY) * -12 // tilt up/down
+    const rotateY = ((x - centerX) / centerX) * 12 // tilt left/right
+
+    const glossX = (x / rect.width) * 100
+    const glossY = (y / rect.height) * 100
+
+    setTransform(`perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.03, 1.03, 1.03)`)
+    setGlossPos({ x: glossX, y: glossY, opacity: 0.25 })
+  }
+
+  const handleMouseLeave = () => {
+    setTransform('perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)')
+    setGlossPos({ x: 50, y: 50, opacity: 0 })
+  }
+
+  // Tier Colors
   const theme = isGold
     ? {
-        cardBg: 'from-[#2a220b] via-[#1a1507] to-[#0d0a03]',
-        borderGradient: 'from-[#fce085] via-[#d4af37] to-[#8a6d1c]',
-        textColor: 'text-[#fce085]',
-        accentColor: 'text-[#ffd700]',
+        gradient: 'from-[#3a2d0c] via-[#241c07] to-[#120e03]',
+        stroke: '#fce085',
+        fill: 'url(#grad-gold)',
+        text: 'text-[#fce085]',
+        label: 'text-[#d4af37]',
+        subtext: 'text-[#fef3c7]',
         badgeBg: 'bg-[#d4af37]/20 text-[#fce085] border-[#d4af37]/40',
-        statColor: 'text-[#fff4cb]',
-        labelColor: 'text-[#c2a149]',
-        divider: 'border-[#d4af37]/30',
-        tierName: 'GOLD SQUAD',
+        tierLabel: 'GOLD TIER',
       }
     : isSilver
     ? {
-        cardBg: 'from-[#1e232a] via-[#12151a] to-[#090b0e]',
-        borderGradient: 'from-[#e2e8f0] via-[#94a3b8] to-[#475569]',
-        textColor: 'text-[#f1f5f9]',
-        accentColor: 'text-[#e2e8f0]',
+        gradient: 'from-[#242933] via-[#161a22] to-[#0a0c10]',
+        stroke: '#e2e8f0',
+        fill: 'url(#grad-silver)',
+        text: 'text-[#f1f5f9]',
+        label: 'text-[#94a3b8]',
+        subtext: 'text-[#f8fafc]',
         badgeBg: 'bg-[#94a3b8]/20 text-[#f1f5f9] border-[#94a3b8]/40',
-        statColor: 'text-[#ffffff]',
-        labelColor: 'text-[#94a3b8]',
-        divider: 'border-[#94a3b8]/30',
-        tierName: 'SILVER SQUAD',
+        tierLabel: 'SILVER TIER',
       }
     : {
-        cardBg: 'from-[#251710] via-[#170e0a] to-[#0a0604]',
-        borderGradient: 'from-[#f59e0b] via-[#b45309] to-[#78350f]',
-        textColor: 'text-[#fef3c7]',
-        accentColor: 'text-[#fbbf24]',
+        gradient: 'from-[#331d12] via-[#1f110a] to-[#0d0704]',
+        stroke: '#f59e0b',
+        fill: 'url(#grad-bronze)',
+        text: 'text-[#fef3c7]',
+        label: 'text-[#d97706]',
+        subtext: 'text-[#fffbeb]',
         badgeBg: 'bg-[#b45309]/20 text-[#fef3c7] border-[#b45309]/40',
-        statColor: 'text-[#fef3c7]',
-        labelColor: 'text-[#d97706]',
-        divider: 'border-[#b45309]/30',
-        tierName: 'BRONZE SQUAD',
+        tierLabel: 'BRONZE TIER',
       }
 
-  // Short position title
-  let posTag = 'DEV'
-  if (score >= 92) posTag = 'GOD'
-  else if (score >= 84) posTag = 'PRO'
-  else if (score >= 75) posTag = 'ART'
-
-  // Stats Breakdown for FUT Card
-  const stats = [
-    { label: 'VEL', val: radar.velocity },
-    { label: 'CLA', val: radar.clarity },
-    { label: 'ALG', val: radar.algorithms },
-    { label: 'STM', val: radar.stamina },
-    { label: 'IMP', val: radar.impact },
-    { label: 'CMP', val: github.codeComplexityScore },
+  // Real Developer Stats
+  const realStats = [
+    { label: 'STARS', val: github.totalStars },
+    { label: 'REPOS', val: github.publicRepos },
+    { label: 'SOLVED', val: leetcode ? leetcode.totalSolved : 'N/A' },
+    { label: 'COMMITS', val: github.recentCommitCount },
+    { label: 'COMPLEXITY', val: `${github.codeComplexityScore}/100` },
+    { label: 'MAIN LANG', val: github.topLanguage },
   ]
 
   const displayName = (github.name || github.username).toUpperCase().slice(0, 14)
@@ -84,81 +95,128 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
   return (
     <div
       ref={cardRef}
-      className="relative w-[320px] sm:w-[350px] mx-auto select-none p-1 rounded-[36px] bg-gradient-to-b shadow-2xl transition-transform hover:scale-[1.01]"
-      style={{
-        backgroundImage: `linear-gradient(135deg, ${isGold ? '#fce085, #8a6d1c' : isSilver ? '#e2e8f0, #475569' : '#f59e0b, #78350f'})`,
-      }}
+      className="relative w-[310px] sm:w-[340px] mx-auto select-none transition-transform duration-200 ease-out py-2"
     >
-      {/* Inner Card Container */}
-      <div className={`w-full h-full rounded-[34px] bg-gradient-to-b ${theme.cardBg} p-6 flex flex-col items-center relative overflow-hidden`}>
-        {/* Subtle Background Geometric Glow */}
-        <div className="absolute -top-24 -left-24 w-48 h-48 rounded-full bg-white/5 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -right-24 w-48 h-48 rounded-full bg-white/5 blur-3xl pointer-events-none" />
+      <div
+        ref={containerRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{ transform, transition: transform ? 'transform 0.1s ease-out' : 'transform 0.5s ease' }}
+        className="relative w-full h-[490px] cursor-pointer"
+      >
+        {/* SVG Shield Background Shape & Trims */}
+        <svg
+          className="absolute inset-0 w-full h-full drop-shadow-[0_20px_35px_rgba(0,0,0,0.8)]"
+          viewBox="0 0 248 372"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <linearGradient id="grad-gold" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#2e240c" />
+              <stop offset="50%" stopColor="#1a1406" />
+              <stop offset="100%" stopColor="#0d0a03" />
+            </linearGradient>
+            <linearGradient id="grad-silver" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#1e232a" />
+              <stop offset="50%" stopColor="#12151a" />
+              <stop offset="100%" stopColor="#090b0e" />
+            </linearGradient>
+            <linearGradient id="grad-bronze" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#251710" />
+              <stop offset="50%" stopColor="#170e0a" />
+              <stop offset="100%" stopColor="#0a0604" />
+            </linearGradient>
+          </defs>
 
-        {/* ── Top Rail: Rating + Position + Lang Badge ── */}
-        <div className="w-full flex items-start justify-between relative z-10">
-          <div className="flex flex-col items-center">
-            <span className={`text-4xl font-mono font-black ${theme.textColor} leading-none tracking-tighter`}>
-              {score}
-            </span>
-            <span className={`text-xs font-mono font-black tracking-widest ${theme.labelColor} mt-0.5`}>
-              {posTag}
-            </span>
-            <div className={`mt-2 px-2 py-0.5 rounded border text-[10px] font-mono font-extrabold ${theme.badgeBg}`}>
-              {github.topLanguage}
-            </div>
-          </div>
+          {/* Outer Shield Frame Path */}
+          <path
+            d="M124 21C150 15 178 11 202 12C218 13 230 20 235 36C238 46 239 54 239 64C239 130 239 200 234 254C231 294 218 322 188 347C170 361 146 369 124 370C102 369 78 361 60 347C30 322 17 294 14 254C9 200 9 130 9 64C9 54 10 46 13 36C18 20 30 13 46 12C70 11 98 15 124 21Z"
+            fill={theme.fill}
+            stroke={theme.stroke}
+            strokeWidth="2.5"
+          />
 
-          {/* CodeAura Brand Crest */}
-          <div className="flex flex-col items-end">
-            <div className="flex items-center gap-1.5 opacity-80">
-              <CodeAuraLogo className="w-5 h-5" />
-              <span className={`text-[11px] font-black uppercase tracking-widest ${theme.textColor}`}>
-                Aura 26
+          {/* Inner Accent Line Trim */}
+          <path
+            d="M124 21C150 15 178 11 202 12C218 13 230 20 235 36C238 46 239 54 239 64C239 130 239 200 234 254C231 294 218 322 188 347C170 361 146 369 124 370C102 369 78 361 60 347C30 322 17 294 14 254C9 200 9 130 9 64C9 54 10 46 13 36C18 20 30 13 46 12C70 11 98 15 124 21Z"
+            transform="translate(124 186) scale(.94) translate(-124 -186)"
+            stroke={theme.stroke}
+            strokeWidth="1"
+            strokeOpacity="0.4"
+            fill="none"
+          />
+        </svg>
+
+        {/* Dynamic Interactive Light Sheen/Gloss Effect */}
+        <div
+          className="absolute inset-0 pointer-events-none rounded-[36px] transition-opacity duration-300 z-30"
+          style={{
+            background: `radial-gradient(circle at ${glossPos.x}% ${glossPos.y}%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%)`,
+            opacity: glossPos.opacity,
+          }}
+        />
+
+        {/* Card Content Overlay */}
+        <div className="absolute inset-0 p-7 flex flex-col justify-between z-20 text-white">
+          {/* ── Top Section: Score + Logo ── */}
+          <div className="flex justify-between items-start pt-2">
+            <div className="flex flex-col items-center">
+              <span className={`text-4xl font-mono font-black ${theme.text} leading-none tracking-tighter`}>
+                {score}
+              </span>
+              <span className={`text-[10px] font-mono font-black tracking-widest ${theme.label} mt-1 uppercase`}>
+                AURA
               </span>
             </div>
-            <span className={`text-[9px] font-mono font-bold tracking-widest ${theme.labelColor} mt-1 uppercase`}>
-              {theme.tierName}
+
+            <div className="flex flex-col items-end">
+              <div className="flex items-center gap-1.5">
+                <CodeAuraLogo className="w-5 h-5" />
+                <span className={`text-xs font-black tracking-wider ${theme.text}`}>CodeAura</span>
+              </div>
+              <span className={`text-[9px] font-mono font-bold tracking-widest ${theme.label} mt-0.5`}>
+                {theme.tierLabel}
+              </span>
+            </div>
+          </div>
+
+          {/* ── Center Developer Avatar ── */}
+          <div className="flex flex-col items-center my-1">
+            <div className="relative">
+              <img
+                src={github.avatarUrl}
+                alt={github.username}
+                className="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover border-2 border-white/20 shadow-xl bg-black/60"
+              />
+              <span className="absolute bottom-0 right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-black" />
+            </div>
+
+            {/* Developer Handle */}
+            <h3 className={`text-lg sm:text-xl font-mono font-black ${theme.text} tracking-wider mt-3 uppercase truncate max-w-[200px] text-center`}>
+              {displayName}
+            </h3>
+
+            {/* Horizontal Line Divider */}
+            <div className="w-4/5 h-[1px] bg-white/15 my-2" />
+          </div>
+
+          {/* ── Bottom Section: Real Developer Metrics ── */}
+          <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 px-2 font-mono text-xs sm:text-sm">
+            {realStats.map((s) => (
+              <div key={s.label} className="flex items-center justify-between">
+                <span className={`text-[10px] font-bold ${theme.label}`}>{s.label}</span>
+                <span className={`font-black ${theme.subtext} truncate max-w-[80px] text-right`}>{s.val}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Archetype Footer */}
+          <div className="pb-2 text-center">
+            <span className={`text-[10px] font-mono font-extrabold ${theme.label} tracking-widest uppercase block truncate px-2`}>
+              {ai.archetype}
             </span>
           </div>
-        </div>
-
-        {/* ── Avatar Frame ── */}
-        <div className="relative my-4 group">
-          <div className="w-32 h-32 sm:w-36 sm:h-36 rounded-full overflow-hidden border-4 border-white/10 shadow-2xl bg-black/60 relative">
-            <img
-              src={github.avatarUrl}
-              alt={github.username}
-              className="w-full h-full object-cover"
-            />
-          </div>
-          {/* Active Player Status Badge */}
-          <span className="absolute bottom-1 right-2 w-4 h-4 rounded-full bg-emerald-400 border-2 border-black" />
-        </div>
-
-        {/* ── Player Name Banner ── */}
-        <div className="w-full text-center relative z-10">
-          <h2 className={`text-xl sm:text-2xl font-black ${theme.textColor} tracking-wider font-mono truncate px-2`}>
-            {displayName}
-          </h2>
-          <div className={`w-3/4 mx-auto my-2 border-b ${theme.divider}`} />
-        </div>
-
-        {/* ── Bottom FUT Stats Grid (2 Columns of 3) ── */}
-        <div className="w-full grid grid-cols-2 gap-x-6 gap-y-1.5 px-4 font-mono z-10 my-1">
-          {stats.map((s) => (
-            <div key={s.label} className="flex items-center justify-between text-xs sm:text-sm">
-              <span className={`font-bold ${theme.labelColor}`}>{s.label}</span>
-              <span className={`font-black ${theme.statColor}`}>{s.val}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* ── Archetype Title Footer ── */}
-        <div className="w-full pt-3 mt-2 border-t border-white/10 text-center relative z-10">
-          <span className={`text-[10px] font-extrabold uppercase tracking-widest ${theme.textColor} block truncate px-2`}>
-            &ldquo;{ai.archetype}&rdquo;
-          </span>
         </div>
       </div>
     </div>

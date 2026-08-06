@@ -156,7 +156,7 @@ export default function AnalysisResultsPage() {
             }`}
           >
             <Award className="w-3.5 h-3.5" />
-            <span>FIFA Scouting Card</span>
+            <span>Developer Card</span>
           </button>
         </div>
 
@@ -196,17 +196,17 @@ export default function AnalysisResultsPage() {
         </div>
       </div>
 
-      {/* ─── Main Content Display: Full Report & FIFA Player Card ─── */}
+      {/* ─── Main Content Display: Full Report & Developer Player Card ─── */}
       <div className="w-full max-w-5xl flex flex-col items-center">
         {activeTab === 'both' && (
           <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* FIFA Scouting Player Card Sticky / Prominent Column */}
+            {/* Developer Card Column */}
             <div className="lg:col-span-4 flex flex-col items-center space-y-4 lg:sticky lg:top-8">
               <div className="text-center space-y-1">
                 <span className="text-[11px] font-mono font-black uppercase tracking-widest text-amber-400">
-                  Scouting Trading Card
+                  Developer Trading Card
                 </span>
-                <p className="text-xs text-gray-400">World Cup 26 Player Rating</p>
+                <p className="text-xs text-gray-400">Developer Telemetry Rating</p>
               </div>
               <AuraFutCard
                 cardRef={futCardRef}
