@@ -39,14 +39,14 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
     const centerX = rect.width / 2
     const centerY = rect.height / 2
 
-    const rotateX = ((y - centerY) / centerY) * -12 // tilt up/down
-    const rotateY = ((x - centerX) / centerX) * 12 // tilt left/right
+    const rotateX = ((y - centerY) / centerY) * -12
+    const rotateY = ((x - centerX) / centerX) * 12
 
     const glossX = (x / rect.width) * 100
     const glossY = (y / rect.height) * 100
 
     setTransform(`perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.03, 1.03, 1.03)`)
-    setGlossPos({ x: glossX, y: glossY, opacity: 0.3 })
+    setGlossPos({ x: glossX, y: glossY, opacity: 0.35 })
   }
 
   const handleMouseLeave = () => {
@@ -82,7 +82,7 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
         tierLabel: 'BRONZE TIER',
       }
 
-  // Real Developer Stats with compact formatting
+  // Real Developer Stats
   const realStats = [
     { label: 'STARS', val: formatCompactNumber(github.totalStars) },
     { label: 'REPOS', val: formatCompactNumber(github.publicRepos) },
@@ -92,12 +92,12 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
     { label: 'MAIN LANG', val: github.topLanguage },
   ]
 
-  const displayName = (github.name || github.username).toUpperCase().slice(0, 14)
+  const displayName = (github.name || github.username).toUpperCase().slice(0, 15)
 
   return (
     <div
       ref={cardRef}
-      className="relative w-[310px] sm:w-[340px] mx-auto select-none transition-transform duration-200 ease-out py-2"
+      className="relative w-[310px] sm:w-[340px] mx-auto select-none transition-transform duration-200 ease-out py-2 font-sans"
     >
       <div
         ref={containerRef}
@@ -155,7 +155,7 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
           />
         </svg>
 
-        {/* Dynamic Interactive Light Sheen/Gloss Effect */}
+        {/* Dynamic Interactive Light Sheen Effect */}
         <div
           className="absolute inset-0 pointer-events-none rounded-[36px] transition-opacity duration-300 z-30"
           style={{
@@ -165,14 +165,14 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
         />
 
         {/* Card Content Overlay */}
-        <div className="absolute inset-0 p-7 flex flex-col justify-between z-20 text-white">
+        <div className="absolute inset-0 p-7 flex flex-col justify-between z-20 text-white font-sans">
           {/* ── Top Section: Score + Logo ── */}
           <div className="flex justify-between items-start pt-2">
             <div className="flex flex-col items-center">
-              <span className={`text-4xl font-mono font-black ${theme.text} leading-none tracking-tighter`}>
+              <span className={`text-4xl sm:text-5xl font-black ${theme.text} leading-none tracking-tight`}>
                 {score}
               </span>
-              <span className={`text-[10px] font-mono font-black tracking-widest ${theme.label} mt-1 uppercase`}>
+              <span className={`text-[10px] font-black tracking-widest ${theme.label} mt-1 uppercase`}>
                 AURA
               </span>
             </div>
@@ -182,7 +182,7 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
                 <CodeAuraLogo className="w-5 h-5" />
                 <span className={`text-xs font-black tracking-wider ${theme.text}`}>CodeAura</span>
               </div>
-              <span className={`text-[9px] font-mono font-bold tracking-widest ${theme.label} mt-0.5`}>
+              <span className={`text-[9px] font-black tracking-widest ${theme.label} mt-0.5`}>
                 {theme.tierLabel}
               </span>
             </div>
@@ -200,7 +200,7 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
             </div>
 
             {/* Developer Handle */}
-            <h3 className={`text-lg sm:text-xl font-mono font-black ${theme.text} tracking-wider mt-3 uppercase truncate max-w-[200px] text-center`}>
+            <h3 className={`text-lg sm:text-xl font-black ${theme.text} tracking-wider mt-3 uppercase truncate max-w-[200px] text-center`}>
               {displayName}
             </h3>
 
@@ -209,10 +209,10 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
           </div>
 
           {/* ── Bottom Section: Real Developer Metrics ── */}
-          <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 px-2 font-mono text-xs sm:text-sm overflow-hidden">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 px-2 font-sans text-xs sm:text-sm overflow-hidden">
             {realStats.map((s) => (
               <div key={s.label} className="flex items-center justify-between min-w-0">
-                <span className={`text-[10px] font-bold ${theme.label} shrink-0 mr-1`}>{s.label}</span>
+                <span className={`text-[10px] font-extrabold ${theme.label} shrink-0 mr-1`}>{s.label}</span>
                 <span className={`font-black ${theme.subtext} truncate text-right`}>{s.val}</span>
               </div>
             ))}
@@ -220,7 +220,7 @@ export const AuraFutCard: React.FC<AuraFutCardProps> = ({ github, leetcode, ai, 
 
           {/* Archetype Footer */}
           <div className="pb-2 text-center overflow-hidden">
-            <span className={`text-[10px] font-mono font-extrabold ${theme.label} tracking-widest uppercase block truncate px-2`}>
+            <span className={`text-[11px] font-black ${theme.label} tracking-widest uppercase block truncate px-2`}>
               {ai.archetype}
             </span>
           </div>

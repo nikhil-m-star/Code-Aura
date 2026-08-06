@@ -2,9 +2,9 @@
 
 <div align="center">
 
-  **Developer Personality & Engineering Profile Analyzer**
+  **Developer Personality, Engineering Profile & Trading Card Generator**
 
-  Analyze GitHub commit telemetry, repository complexity, and LeetCode algorithmic mastery to generate AI-powered developer archetypes, hilarious roasts, glowing praises, and weighted Aura scores.
+  Analyze GitHub commit telemetry, repository complexity, and LeetCode algorithmic mastery to generate AI-powered developer archetypes, hilarious roasts, glowing praises, weighted Aura scores, and interactive 3D Trading Cards.
 
   [Live Demo](https://code-aura-app.vercel.app) • [GitHub Repository](https://github.com/nikhil-m-star/Code-Aura)
 
@@ -14,18 +14,19 @@
 
 ## 🌟 Overview
 
-**CodeAura** turns developer profiles into insightful, beautifully formatted visual intelligence cards. By synthesizing raw data from **GitHub's REST API** and **LeetCode's GraphQL API**, CodeAura evaluates developer velocity, code complexity, circadian commit patterns, and algorithmic mastery. An AI engine (powered by **Meta Llama 3.1 8B via NVIDIA NIM API**) formulates custom archetypes, witty roasts, constructive praise, and personalized tech stack recommendations.
+**CodeAura** turns developer profiles into insightful, beautifully formatted visual intelligence reports and interactive 3D trading cards. By synthesizing raw data from **GitHub's REST API** and **LeetCode's GraphQL API**, CodeAura evaluates developer velocity, code complexity, circadian commit patterns, and algorithmic mastery. An AI engine (powered by **Meta Llama 3.1 8B via NVIDIA NIM API**) formulates custom archetypes, witty roasts, constructive praise, and personalized tech stack recommendations.
 
 ---
 
 ## ✨ Features
 
 - 📊 **Multi-Platform Telemetry**: Concurrently fetches public GitHub repositories, commit velocity, circadian work windows, code complexity, and LeetCode problem difficulty breakdowns.
-- 🎯 **Weighted Aura Scoring**: Uses a non-linear, multi-axis algorithm (Velocity, Clarity, Algorithms, Stamina, Impact) to compute a realistic 1-99 developer Aura Score.
-- 🤖 **AI-Powered Archetypes & Roasts**: Generates witty 2-4 word developer archetypes, sharp roasts, glowing praises, PR nemesis profiles, and stack recommendations.
+- 🎴 **Interactive 3D Developer Trading Cards**: Generates metallic Gold, Silver, and Bronze trading cards (`AuraFutCard.tsx`) featuring real developer metrics, custom curved shield geometry, and interactive 3D tilt/sheen animations.
+- 🎯 **Weighted Aura & Inferred Algorithm Engine**: Uses a multi-axis scoring model (Velocity, Clarity, Algorithms, Stamina, Impact) that dynamically infers algorithmic strength from code complexity and community impact when LeetCode is not linked.
+- 🤖 **AI-Powered Archetypes & Roasts**: Generates witty developer archetypes, sharp roasts, glowing praises, PR nemesis profiles, and stack recommendations.
 - 🎨 **Modern Minimalist UI**: Pitch-black theme paired with vibrant flat solid color blocks, Lucide vector icons, and custom SVG logos.
 - 🔄 **Dynamic Fisheye Marquee**: Features a smooth 35-second infinite circular logo ticker with interactive fisheye scaling for loading states.
-- 📸 **One-Click Share & Export**: Download high-resolution PNG aura cards directly from the browser using `html-to-image`.
+- 📸 **One-Click Share & Export**: Download high-resolution PNG aura cards or scouting trading cards directly from the browser using `html-to-image`.
 - 🔒 **Authenticated History Vault**: Clerk authentication powered by Server Actions and PostgreSQL (via Prisma) to save and revisit generated developer auras.
 - ⏱️ **Built-in Rate Limiting**: Server-side cooldown protection to ensure fair API usage and prevent spam.
 
@@ -50,13 +51,13 @@
 
 CodeAura's composite score avoids artificial inflation by calculating 5 distinct metrics before applying a weighted sum:
 
-$$\text{AuraScore} = 0.20(\text{Velocity}) + 0.15(\text{Clarity}) + 0.25(\text{Algorithms}) + 0.15(\text{Stamina}) + 0.25(\text{Impact})$$
+$$\text{AuraScore} = 0.20(\text{Velocity}) + 0.20(\text{Clarity}) + 0.20(\text{Algorithms}) + 0.15(\text{Stamina}) + 0.25(\text{Impact})$$
 
 - **Velocity (20%)**: Evaluates recent commit frequency using non-linear diminishing returns.
-- **Clarity (15%)**: Evaluates code complexity based on repository language diversity, total stars, and commit volume.
-- **Algorithms (25%)**: Measures LeetCode problem difficulty (Easy/Medium/Hard) and acceptance rates, or defaults based on practical repository building.
+- **Clarity (20%)**: Evaluates code complexity based on repository language diversity, total stars, and commit volume.
+- **Algorithms (20%)**: Measures LeetCode problem difficulty or infers algorithmic strength from code complexity and repository volume ($\text{Score} \times 0.70 + \log_{10}(\text{Stars} + 1) \times 10$).
 - **Stamina (15%)**: Measures build consistency through public repos, pull requests, and commit frequency.
-- **Impact (25%)**: Applies logarithmic scaling to community stars and follower counts ($\log_{10}(\text{Stars} + 1)$).
+- **Impact (25%)**: Applies logarithmic scaling to community stars and follower counts ($\log_{10}(\text{Stars} + 1) \times 20$).
 
 ---
 
@@ -125,7 +126,8 @@ CodeAura/
 │   │   ├── layout.tsx        # App Shell, Font Configuration & Navbar
 │   │   └── page.tsx          # Homepage & Dynamic Fisheye Marquee Loader
 │   ├── components/
-│   │   ├── AuraCard.tsx      # Main Color-Coded Developer Aura Card
+│   │   ├── AuraCard.tsx      # Main Color-Coded Developer Aura Report
+│   │   ├── AuraFutCard.tsx   # Interactive 3D Metallic Developer Trading Card
 │   │   ├── CodeAuraLogo.tsx  # Developer Laptop SVG Logo
 │   │   ├── GithubIcon.tsx    # GitHub SVG Icon Component
 │   │   └── BrandLogos.tsx    # Technology Stack Vector Logos
