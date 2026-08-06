@@ -191,17 +191,45 @@ function generateFallbackSummary(
     praise = `Pragmatic Titan: Bypasses online puzzle grinding to ship actual working full-stack applications directly to production.`
   }
 
-  const velocity = Math.min(100, Math.max(50, github.recentCommitCount * 4 + 45))
-  const clarity = Math.min(100, Math.max(55, github.codeComplexityScore))
-  const algorithms = leetcode ? Math.min(100, leetcode.algoMasteryScore + 10) : 55
-  const stamina = Math.min(100, Math.max(60, github.nightOwlScore + 40))
-  const impact = Math.min(100, Math.max(45, github.totalStars * 4 + github.followers * 2 + 35))
+  // ── Realistic score calculations ──
+  // Velocity: based on commit count with diminishing returns
+  const commitCount = github.recentCommitCount || 0
+  const velocity = Math.min(100, Math.round(
+    commitCount <= 0 ? 15 :
+    commitCount <= 5 ? 20 + commitCount * 6 :
+    commitCount <= 20 ? 45 + (commitCount - 5) * 2.5 :
+    commitCount <= 50 ? 82 + (commitCount - 20) * 0.4 :
+    94 + Math.min(6, (commitCount - 50) * 0.1)
+  ))
+
+  // Clarity: directly from code complexity score, no inflated floor
+  const clarity = Math.min(100, Math.max(20, github.codeComplexityScore))
+
+  // Algorithms: LeetCode-based or low default for non-LC users
+  const algorithms = leetcode
+    ? Math.min(100, Math.max(15, leetcode.algoMasteryScore))
+    : Math.min(40, 15 + github.publicRepos)
+
+  // Stamina: consistency signal from repo count + commit activity
+  const repoSignal = Math.min(40, github.publicRepos * 2)
+  const prSignal = Math.min(30, (github.pullRequestCount || 0) * 3)
+  const stamina = Math.min(100, Math.max(10, repoSignal + prSignal + (commitCount > 10 ? 20 : commitCount > 3 ? 10 : 0)))
+
+  // Impact: logarithmic scaling for stars and followers — 1000 stars ≈ 85, not 100
+  const starScore = github.totalStars > 0 ? Math.min(50, Math.round(Math.log10(github.totalStars + 1) * 18)) : 0
+  const followerScore = github.followers > 0 ? Math.min(30, Math.round(Math.log10(github.followers + 1) * 12)) : 0
+  const originalityBonus = Math.round(github.originalityRatio * 0.2)
+  const impact = Math.min(100, Math.max(5, starScore + followerScore + originalityBonus))
+
+  // Composite aura: weighted average (impact and algorithms matter more)
+  const rawAura = (velocity * 0.2) + (clarity * 0.15) + (algorithms * 0.25) + (stamina * 0.15) + (impact * 0.25)
+  const auraScore = Math.min(99, Math.max(10, Math.round(rawAura)))
 
   return {
     archetype,
     tagline: `Crafting software in ${github.topLanguage} during ${github.timeSlot.toLowerCase()} hours.`,
     auraColor,
-    auraScore: Math.round((velocity + clarity + algorithms + stamina + impact) / 5),
+    auraScore,
     keyVibe: isNightOwl ? 'Midnight Syntax' : 'Precision Engineering',
     observations,
     roast,

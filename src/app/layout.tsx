@@ -40,7 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <header className="w-full bg-black px-6 py-6">
             <div className="max-w-5xl mx-auto flex items-center justify-between">
               <Link href="/" className="flex items-center gap-2.5">
-                <CodeAuraLogo className="w-7 h-7" />
+                <CodeAuraLogo className="w-9 h-9" />
                 <span className="font-extrabold text-xl tracking-tight text-white font-sans">
                   CodeAura
                 </span>
